@@ -14,7 +14,7 @@
 	<name>SaphirLion</name>
 	<description>App to manage our series progression</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

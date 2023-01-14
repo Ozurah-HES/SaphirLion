@@ -1,0 +1,38 @@
+Table User {
+  id int
+  name varchar
+  password varchar
+}
+
+Table Media {
+  id int
+  name varchar
+  type_id int
+  category_id int
+}
+
+Table Type {
+  id int
+  type varchar
+}
+
+Table Category {
+  id int
+  category varchar
+}
+
+Table User_Media {
+  id int
+  user_id int
+  media_id int
+  nb_published int
+  nb_owned int
+  last_seen int
+  remark varchar
+}
+
+Ref: User.id < User_Media.user_id
+ref: Media.id < User_Media.media_id
+
+ref: Media.category_id > Category.id
+ref: Media.type_id > Type.id

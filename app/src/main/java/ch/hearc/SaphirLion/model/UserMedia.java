@@ -18,14 +18,26 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinColumn;
 
 @Entity
-public class User {
+public class UserMedia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
-
-    private String password;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+    
+    @ManyToOne
+    @JoinColumn(name = "media_id")
+    private Media media;
+    
+    private int nbPublished;
+    
+    private int nbOwner;
+    
+    private int lastSeen;
+    
+    private String remark;
 
     // Getters et setters
 }

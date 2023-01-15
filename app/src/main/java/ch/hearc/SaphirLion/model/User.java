@@ -9,6 +9,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -52,7 +54,7 @@ public class User {
     }
 
     public void setPasswordAndCrypt(String password) {
-        this.password = password; // TODO cryptage
+        this.password = new BCryptPasswordEncoder().encode(password);
     }
 
     public Set<UserMedia> getUsermedias() {

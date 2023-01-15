@@ -33,11 +33,63 @@ public class UserMedia {
     
     private int nbPublished;
     
-    private int nbOwner;
+    private int nbOwned;
     
     private int lastSeen;
     
     private String remark;
 
-    // Getters et setters
+    public Long getId() {
+        return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Media getMedia() {
+        return media;
+    }
+
+    public void setMedia(Media media) {
+        this.media = media;
+    }
+
+    public int getNbPublished() {
+        return nbPublished;
+    }
+
+    public void setNbPublished(int nbPublished) {
+        this.nbPublished = nbPublished;
+    }
+
+    public int getNbOwned() {
+        return nbOwned;
+    }
+
+    public void setNbOwned(int nbOwned) {
+        this.nbOwned = nbOwned;
+    }
+
+    public int getLastSeen() {
+        return lastSeen;
+    }
+
+    public void setLastSeen(int lastSeen) {
+        this.lastSeen = lastSeen;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    
 }

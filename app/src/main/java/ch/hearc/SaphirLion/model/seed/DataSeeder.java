@@ -2,6 +2,7 @@ package ch.hearc.SaphirLion.model.seed;
 
 import java.util.Arrays;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -84,5 +85,35 @@ public class DataSeeder implements CommandLineRunner {
         userMedia2.setLastSeen(0);
         userMedia2.setRemark("Remark 2");
         userMediaRepository.saveAll(Arrays.asList(userMedia1, userMedia2));
+
+        // READ DATA TEST :
+
+
+        /* /!\ PROBLEME RENCONTRE : /!\ 
+         // Pour avoir les medias chargés avec findAll(), il faudrais ajouter dans la classe Type : 
+            Je sais pas ce qui est le mieux
+            @OneToMany(mappedBy = "type", fetch = FetchType.EAGER)
+            private Set<Media> medias = new TreeSet<Media>();
+         */
+        System.out.println("Test type->media findAllWithMedias() :");
+        var types = typeRepository.findAllWithMedias();
+        for (Type type : types) {
+            for (Media media : type.getMedias()) {
+                System.out.println(media.getName());
+            }
+        }
+
+        System.out.println("Test type->media findMediasByType() :");
+        for (Type type : types) {
+            for (Media media : typeRepository.findMediasByType(type.getId())) {
+                System.out.println(media.getName());
+            }
+        }
+
+        System.out.println("Test media->type findAll() :");
+        var medias = mediaRepository.findAll();
+        for (Media media : medias) {
+            System.out.println(media.getType().getType());
+        }
     }
 }

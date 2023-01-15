@@ -24,11 +24,11 @@ public class UserMedia {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable=false)
     private User user;
     
     @ManyToOne
-    @JoinColumn(name = "media_id")
+    @JoinColumn(name = "media_id", nullable=false)
     private Media media;
     
     private int nbPublished;

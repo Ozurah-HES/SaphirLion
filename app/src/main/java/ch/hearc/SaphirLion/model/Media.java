@@ -19,11 +19,11 @@ public class Media {
 
     
     @ManyToOne
-    @JoinColumn(name = "type_id")
+    @JoinColumn(name = "type_id", nullable=false)
     private Type type;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable=false)
     private Category category;
 
     public Long getId() {

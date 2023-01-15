@@ -2,6 +2,7 @@ package ch.hearc.SaphirLion.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,11 +23,11 @@ public class Media {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "type_id", nullable=false)
+    @JoinColumn(name = "type_id", nullable = false)
     private Type type;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable=false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @OneToMany(mappedBy = "media")
@@ -62,5 +63,20 @@ public class Media {
 
     public List<UserMedia> getUserMedias() {
         return usermedias;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+
+        return Objects.equals(id, ((Media) obj).id);
     }
 }

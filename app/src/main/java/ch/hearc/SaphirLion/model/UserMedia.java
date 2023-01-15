@@ -1,5 +1,7 @@
 package ch.hearc.SaphirLion.model;
 
+import java.util.Objects;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,19 +16,19 @@ public class UserMedia {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable=false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    
+
     @ManyToOne
-    @JoinColumn(name = "media_id", nullable=false)
+    @JoinColumn(name = "media_id", nullable = false)
     private Media media;
-    
+
     private int nbPublished;
-    
+
     private int nbOwned;
-    
+
     private int lastSeen;
-    
+
     private String remark;
 
     public Long getId() {
@@ -79,5 +81,20 @@ public class UserMedia {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+
+        return Objects.equals(id, ((UserMedia) obj).id);
     }
 }

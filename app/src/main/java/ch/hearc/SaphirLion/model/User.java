@@ -2,6 +2,7 @@ package ch.hearc.SaphirLion.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -52,5 +53,20 @@ public class User {
 
     public List<UserMedia> getUserMedias() {
         return usermedias;
-    }    
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+
+        return Objects.equals(id, ((User) obj).id);
+    }
 }

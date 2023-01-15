@@ -38,8 +38,4 @@ public class Type {
     public Set<Media> getMedias() {
         return medias;
     }
-
-    public void addMedia(Media media) {
-        this.medias.add(media);
-    }
 }

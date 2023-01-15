@@ -1,5 +1,8 @@
 package ch.hearc.SaphirLion.model;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +20,9 @@ public class Category {
 
     private String category;
 
+    @OneToMany(mappedBy = "category")
+    private Set<Media> medias = new TreeSet<Media>();
+
     public Long getId() {
         return id;
     }
@@ -27,5 +33,9 @@ public class Category {
 
     public void setCategory(String category) {
         this.category = category;
-    } 
+    }
+
+    public Set<Media> getMedias() {
+        return medias;
+    }
 }

@@ -14,5 +14,5 @@ public interface TypeRepository extends CrudRepository<Type, Long> {
     Set<Type> findAllWithMedias();
 
     @Query("SELECT m FROM Media m JOIN FETCH m.type WHERE m.type.id = ?1")
-    Set<Media> findMediasByType(Long id);
+    Set<Media> findAllMedias(Long typeId);
 }

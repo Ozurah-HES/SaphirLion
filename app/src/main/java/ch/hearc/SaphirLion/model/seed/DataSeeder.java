@@ -60,7 +60,8 @@ public class DataSeeder implements CommandLineRunner {
         media2.setName("Media 2");
         media2.setType(type2);
         media2.setCategory(category2);
-        mediaRepository.saveAll(Arrays.asList(media1, media2));
+        // Test change order to see if it works when testing mediaRepository.findAllWithTypes()
+        mediaRepository.saveAll(Arrays.asList(media2, media1));
 
         User user1 = new User();
         user1.setUsername("User 1");
@@ -88,12 +89,14 @@ public class DataSeeder implements CommandLineRunner {
 
         // READ DATA TEST :
 
-
-        /* /!\ PROBLEME RENCONTRE : /!\ 
-         // Pour avoir les medias chargés avec findAll(), il faudrais ajouter dans la classe Type : 
-            Je sais pas ce qui est le mieux
-            @OneToMany(mappedBy = "type", fetch = FetchType.EAGER)
-            private Set<Media> medias = new TreeSet<Media>();
+        /*
+         * /!\ PROBLEME RENCONTRE : /!\
+         * // Pour avoir les medias chargés avec findAll(), il faudrais ajouter dans la
+         * classe Type :
+         * Je sais pas ce qui est le mieux
+         * 
+         * @OneToMany(mappedBy = "type", fetch = FetchType.EAGER)
+         * private Set<Media> medias = new TreeSet<Media>();
          */
         System.out.println("Test type->media findAllWithMedias() :");
         var types = typeRepository.findAllWithMedias();
@@ -105,7 +108,7 @@ public class DataSeeder implements CommandLineRunner {
 
         System.out.println("Test type->media findMediasByType() :");
         for (Type type : types) {
-            for (Media media : typeRepository.findMediasByType(type.getId())) {
+            for (Media media : typeRepository.findAllMedias(type.getId())) {
                 System.out.println(media.getName());
             }
         }
@@ -114,6 +117,20 @@ public class DataSeeder implements CommandLineRunner {
         var medias = mediaRepository.findAll();
         for (Media media : medias) {
             System.out.println(media.getType().getType());
+        }
+
+        System.out.println("Test usermedia->media :");
+        var userMedias = userMediaRepository.findAll();
+        for (UserMedia um : userMedias) {
+            System.out.println(um.getMedia().getName() + " " + um.getMedia().getCategory().getCategory());
+        }
+
+        System.out.println("Test user->media :");
+        var users = userRepository.findAllWithUserMedias();
+        for (User user : users) {
+            for (UserMedia userMedia : user.getUsermedias()) {
+                System.out.println(userMedia.getMedia().getName() + " " + userMedia.getMedia().getType().getType());
+            }
         }
     }
 }

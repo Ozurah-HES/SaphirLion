@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +27,9 @@ public class User {
     private String username;
 
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserMedia> usermedias = new TreeSet<UserMedia>();
 
     public Long getId() {
         return id;
@@ -49,5 +53,9 @@ public class User {
 
     public void setPasswordAndCrypt(String password) {
         this.password = password; // TODO cryptage
+    }
+
+    public Set<UserMedia> getUsermedias() {
+        return usermedias;
     }    
 }

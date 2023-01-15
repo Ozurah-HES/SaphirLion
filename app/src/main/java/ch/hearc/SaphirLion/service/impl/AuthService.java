@@ -7,6 +7,7 @@
 // https://spring.io/guides/gs/securing-web/
 package ch.hearc.SaphirLion.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +18,11 @@ import jakarta.servlet.http.HttpSession;
 
 @Service
 public class AuthService implements AuthService_I {
+    @Autowired
     private UserRepository userRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public AuthService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userRepository = userRepository;
+    public AuthService(BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -35,5 +36,10 @@ public class AuthService implements AuthService_I {
             return user;
         }
         return null;
+    }
+
+    @Override
+    public User connectedUser(HttpSession session) {
+        return (User) session.getAttribute("user");
     }
 }

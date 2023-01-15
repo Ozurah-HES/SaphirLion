@@ -59,7 +59,7 @@ public class User {
         this.password = new BCryptPasswordEncoder().encode(password);
     }
 
-    public Set<UserMedia> getUsermedias() {
+    public Set<UserMedia> getUserMedias() {
         return usermedias;
     }    
 }

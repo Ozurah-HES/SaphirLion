@@ -3,14 +3,14 @@ package ch.hearc.SaphirLion.model;
 import java.util.Set;
 import java.util.TreeSet;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Media {
@@ -18,9 +18,9 @@ public class Media {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String name;
 
-    
     @ManyToOne
     @JoinColumn(name = "type_id", nullable=false)
     private Type type;
@@ -60,7 +60,7 @@ public class Media {
         this.category = category;
     }
 
-    public Set<UserMedia> getUsermedias() {
+    public Set<UserMedia> getUserMedias() {
         return usermedias;
     }
 }

@@ -10,14 +10,12 @@ import ch.hearc.SaphirLion.service.impl.AuthService;
 
 @Component
 public class AuthServiceTest implements CommandLineRunner {
-
-    @Autowired
-    private UserRepository userRepository;
     
+    @Autowired
+    private AuthService auth;
+
     @Override
     public void run(String... args) throws Exception {
-
-        var auth = new AuthService(userRepository, new BCryptPasswordEncoder());
 
         var user = auth.authenticate("User 1", "password", null);
         var userBadPassword = auth.authenticate("User 1", "psw", null);

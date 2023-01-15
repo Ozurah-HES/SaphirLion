@@ -156,7 +156,7 @@ public class DataSeeder implements CommandLineRunner {
         System.out.println("Test user->media :");
         var users = userRepository.findAllWithUserMedias();
         for (User user : users) {
-            for (UserMedia userMedia : user.getUsermedias()) {
+            for (UserMedia userMedia : user.getUserMedias()) {
                 System.out.println(userMedia.getMedia().getName() + " " + userMedia.getMedia().getType().getType());
             }
         }

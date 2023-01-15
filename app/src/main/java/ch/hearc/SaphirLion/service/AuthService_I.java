@@ -5,4 +5,6 @@ import jakarta.servlet.http.HttpSession;
 
 public interface AuthService_I {
     User authenticate(String username, String password, HttpSession session);
+
+    User connectedUser(HttpSession session);
 }

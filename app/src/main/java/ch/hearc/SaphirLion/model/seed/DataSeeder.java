@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import ch.hearc.SaphirLion.repository.CategoryRepository;
@@ -37,9 +38,34 @@ public class DataSeeder implements CommandLineRunner {
     @Autowired
     private UserMediaRepository userMediaRepository;
 
+    @Autowired
+    private Environment env;
+
     @Override
     public void run(String... args) throws Exception {
+        String ddlAuto = env.getProperty("spring.jpa.hibernate.ddl-auto");
+        if (ddlAuto == null) {
+            return;
+        }
 
+        if (ddlAuto.equals("create")
+                || ddlAuto.equals("create-drop")) {
+            seed();
+        }
+
+        // Seed only if new database
+        if (ddlAuto.equals("update")) {
+            if (userRepository.count() == 0
+                    && mediaRepository.count() == 0
+                    && typeRepository.count() == 0
+                    && categoryRepository.count() == 0
+                    && userMediaRepository.count() == 0) {
+                seed();
+            }
+        }
+    }
+
+    private void seed() {
         Type type1 = new Type();
         type1.setType("Type 1");
         Type type2 = new Type();
@@ -60,7 +86,8 @@ public class DataSeeder implements CommandLineRunner {
         media2.setName("Media 2");
         media2.setType(type2);
         media2.setCategory(category2);
-        // Test change order to see if it works when testing mediaRepository.findAllWithTypes()
+        // Test change order to see if it works when testing
+        // mediaRepository.findAllWithTypes()
         mediaRepository.saveAll(Arrays.asList(media2, media1));
 
         User user1 = new User();
@@ -95,7 +122,7 @@ public class DataSeeder implements CommandLineRunner {
          * classe Type :
          * 
          * @OneToMany(mappedBy = "type", fetch = FetchType.EAGER)
-         * private Set<Media> medias = new TreeSet<Media>();
+         * private List<Media> medias = new ArrayList<Media>();
          * 
          * Je sais pas ce qui est le mieux
          */
@@ -129,7 +156,7 @@ public class DataSeeder implements CommandLineRunner {
         System.out.println("Test user->media :");
         var users = userRepository.findAllWithUserMedias();
         for (User user : users) {
-            for (UserMedia userMedia : user.getUsermedias()) {
+            for (UserMedia userMedia : user.getUserMedias()) {
                 System.out.println(userMedia.getMedia().getName() + " " + userMedia.getMedia().getType().getType());
             }
         }

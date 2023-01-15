@@ -55,17 +55,12 @@ public class MediaService implements MediaService_I {
     @Override
     public List<Media> readAllOfUser(Long userId) {
 
-        // var medias = mediaRepository.findAllWithUserMedias();
-        var medias = mediaRepository.findAll();
-        var mediaOfUserSet = new ArrayList<Media>();
+        var medias = mediaRepository.findAllWithUserMedias();
 
-        for (Media media : medias) {
-            if (media.getUserMedias().stream().anyMatch(userMedia -> userMedia.getUser().getId() == userId)) {
-                mediaOfUserSet.add(media);
-            }
-        }
-
-        return mediaOfUserSet;
+        return medias.stream().filter(
+            media -> media.getUserMedias().stream().anyMatch(
+                userMedia -> userMedia.getUser().getId() == userId
+            )).toList();
     }
 
     @Override

@@ -31,8 +31,8 @@ public class MediaServiceTest implements CommandLineRunner {
         // Create
         var newMedia = new Media();
         newMedia.setName("Test media");
-        newMedia.setType(types.iterator().next());
-        newMedia.setCategory(categories.iterator().next());
+        newMedia.setType(types.get(0));
+        newMedia.setCategory(categories.get(0));
         var media = mediaService.create(newMedia);
         assert media.equals(newMedia);
 

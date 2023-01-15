@@ -1,13 +1,7 @@
 package ch.hearc.SaphirLion.model;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -17,9 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.JoinColumn;
 
 @Entity
 public class User {
@@ -33,7 +24,7 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private Set<UserMedia> usermedias = new TreeSet<UserMedia>();
+    private List<UserMedia> usermedias = new ArrayList<UserMedia>();
 
     public Long getId() {
         return id;
@@ -59,7 +50,7 @@ public class User {
         this.password = new BCryptPasswordEncoder().encode(password);
     }
 
-    public Set<UserMedia> getUserMedias() {
+    public List<UserMedia> getUserMedias() {
         return usermedias;
     }    
 }

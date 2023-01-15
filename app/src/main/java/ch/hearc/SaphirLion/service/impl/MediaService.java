@@ -1,7 +1,7 @@
 package ch.hearc.SaphirLion.service.impl;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,16 +48,16 @@ public class MediaService implements MediaService_I {
     }
 
     @Override
-    public Set<Media> readAll() {
-        return (Set<Media>) mediaRepository.findAll();
+    public List<Media> readAll() {
+        return (List<Media>) mediaRepository.findAll();
     }
 
     @Override
-    public Set<Media> readAllOfUser(Long userId) {
+    public List<Media> readAllOfUser(Long userId) {
 
         // var medias = mediaRepository.findAllWithUserMedias();
         var medias = mediaRepository.findAll();
-        var mediaOfUserSet = new TreeSet<Media>();
+        var mediaOfUserSet = new ArrayList<Media>();
 
         for (Media media : medias) {
             if (media.getUserMedias().stream().anyMatch(userMedia -> userMedia.getUser().getId() == userId)) {
@@ -69,17 +69,12 @@ public class MediaService implements MediaService_I {
     }
 
     @Override
-    public Set<Type> readAllTypes() {
-        Set<Type> res = new TreeSet<Type>();
-        var d = typeRepository.findAll();
-
-        d.forEach(res::add);
-        return res;
-        // return new TreeSet<Type>(typeRepository.findAll());
+    public List<Type> readAllTypes() {
+        return (List<Type>)typeRepository.findAll();
     }
 
     @Override
-    public Set<Category> readAllCategories() {
-        return (Set<Category>) categoryRepository.findAll();
+    public List<Category> readAllCategories() {
+        return (List<Category>) categoryRepository.findAll();
     }
 }

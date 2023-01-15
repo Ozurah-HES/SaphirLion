@@ -2,12 +2,9 @@ package ch.hearc.SaphirLion.service.test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import ch.hearc.SaphirLion.model.Category;
 import ch.hearc.SaphirLion.model.Media;
-import ch.hearc.SaphirLion.repository.UserRepository;
 import ch.hearc.SaphirLion.service.impl.AuthService;
 import ch.hearc.SaphirLion.service.impl.MediaService;
 

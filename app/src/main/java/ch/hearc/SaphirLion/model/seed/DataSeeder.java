@@ -122,7 +122,7 @@ public class DataSeeder implements CommandLineRunner {
          * classe Type :
          * 
          * @OneToMany(mappedBy = "type", fetch = FetchType.EAGER)
-         * private Set<Media> medias = new TreeSet<Media>();
+         * private List<Media> medias = new ArrayList<Media>();
          * 
          * Je sais pas ce qui est le mieux
          */

@@ -1,7 +1,7 @@
 package ch.hearc.SaphirLion.model;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,7 +30,7 @@ public class Media {
     private Category category;
 
     @OneToMany(mappedBy = "media")
-    private Set<UserMedia> usermedias = new TreeSet<UserMedia>();
+    private List<UserMedia> usermedias = new ArrayList<UserMedia>();
 
     public Long getId() {
         return id;
@@ -60,7 +60,7 @@ public class Media {
         this.category = category;
     }
 
-    public Set<UserMedia> getUserMedias() {
+    public List<UserMedia> getUserMedias() {
         return usermedias;
     }
 }

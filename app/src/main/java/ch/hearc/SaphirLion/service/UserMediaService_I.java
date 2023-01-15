@@ -1,6 +1,6 @@
 package ch.hearc.SaphirLion.service;
 
-import java.util.Set;
+import java.util.List;
 
 import ch.hearc.SaphirLion.model.UserMedia;
 
@@ -12,5 +12,5 @@ public interface UserMediaService_I {
     public void delete(Long id);
 
     // Other
-    public Set<UserMedia> readAllOfUser(Long userId);
+    public List<UserMedia> readAllOfUser(Long userId);
 }

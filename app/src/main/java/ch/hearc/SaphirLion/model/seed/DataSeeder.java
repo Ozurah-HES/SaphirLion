@@ -93,10 +93,11 @@ public class DataSeeder implements CommandLineRunner {
          * /!\ PROBLEME RENCONTRE : /!\
          * // Pour avoir les medias chargés avec findAll(), il faudrais ajouter dans la
          * classe Type :
-         * Je sais pas ce qui est le mieux
          * 
          * @OneToMany(mappedBy = "type", fetch = FetchType.EAGER)
          * private Set<Media> medias = new TreeSet<Media>();
+         * 
+         * Je sais pas ce qui est le mieux
          */
         System.out.println("Test type->media findAllWithMedias() :");
         var types = typeRepository.findAllWithMedias();

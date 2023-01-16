@@ -36,7 +36,7 @@ public class UserMediaService implements UserMediaService_I {
 
     @Override
     public List<UserMedia> readAllOfUser(Long userId) {
-       return userMediaRepository.findByUserId(userId);
+        return userMediaRepository.findByUserId(userId);
     }
 
 }

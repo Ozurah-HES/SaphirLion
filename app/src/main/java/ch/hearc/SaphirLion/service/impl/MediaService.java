@@ -1,6 +1,5 @@
 package ch.hearc.SaphirLion.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +31,7 @@ public class MediaService implements MediaService_I {
     }
 
     @Override
-    public Media read(Long id)
-    {
+    public Media read(Long id) {
         return mediaRepository.findById(id).orElse(null);
     }
 
@@ -57,18 +55,19 @@ public class MediaService implements MediaService_I {
 
         return mediaRepository.findAllOfUser(userId);
 
-        // === OLD TEST CODE (Should be tested when we have seen the correct way to do tests) ===
-        
+        // === OLD TEST CODE (Should be tested when we have seen the correct way to do
+        // tests) ===
+
         // var medias = mediaRepository.findAllWithUserMedias();
         // return medias.stream().filter(
-        //     media -> media.getUserMedias().stream().anyMatch(
-        //         userMedia -> userMedia.getUser().getId() == userId
-        //     )).toList();
+        // media -> media.getUserMedias().stream().anyMatch(
+        // userMedia -> userMedia.getUser().getId() == userId
+        // )).toList();
     }
 
     @Override
     public List<Type> readAllTypes() {
-        return (List<Type>)typeRepository.findAll();
+        return (List<Type>) typeRepository.findAll();
     }
 
     @Override

@@ -16,7 +16,7 @@ public class MediaServiceTest implements CommandLineRunner {
 
     @Autowired
     MediaService mediaService;
-    
+
     @Override
     public void run(String... args) throws Exception {
         var user = userRepository.findByUsername("User 1");
@@ -56,5 +56,5 @@ public class MediaServiceTest implements CommandLineRunner {
         assert !medias.contains(newMedia);
         media = mediaService.read(media.getId());
         assert media == null;
-    } 
+    }
 }

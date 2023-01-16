@@ -8,7 +8,7 @@ import ch.hearc.SaphirLion.service.impl.AuthService;
 
 @Component
 public class AuthServiceTest implements CommandLineRunner {
-    
+
     @Autowired
     private AuthService auth;
 
@@ -24,5 +24,5 @@ public class AuthServiceTest implements CommandLineRunner {
         assert user.getUsername().equals("User 1");
         assert userBadPassword == null;
         assert userBadName == null;
-    } 
+    }
 }

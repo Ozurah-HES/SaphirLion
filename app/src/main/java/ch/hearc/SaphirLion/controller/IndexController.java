@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class IndexController {
 
-    @GetMapping({"/","/home", "/index"})
+    @GetMapping({ "/", "/home", "/index" })
     public String home(Model model, HttpSession session, @AuthenticationPrincipal User user) {
         // User user = (User) session.getAttribute("user");
 
@@ -22,7 +22,7 @@ public class IndexController {
     }
 
     // Temp 2nd page
-    @GetMapping({"/page2"})
+    @GetMapping({ "/page2" })
     public String page2(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
 

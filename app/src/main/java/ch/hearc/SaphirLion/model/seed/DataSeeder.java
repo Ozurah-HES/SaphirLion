@@ -2,23 +2,21 @@ package ch.hearc.SaphirLion.model.seed;
 
 import java.util.Arrays;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import ch.hearc.SaphirLion.model.Category;
+import ch.hearc.SaphirLion.model.Media;
+import ch.hearc.SaphirLion.model.Type;
+import ch.hearc.SaphirLion.model.User;
+import ch.hearc.SaphirLion.model.UserMedia;
 import ch.hearc.SaphirLion.repository.CategoryRepository;
 import ch.hearc.SaphirLion.repository.MediaRepository;
 import ch.hearc.SaphirLion.repository.TypeRepository;
 import ch.hearc.SaphirLion.repository.UserMediaRepository;
 import ch.hearc.SaphirLion.repository.UserRepository;
-
-import ch.hearc.SaphirLion.model.Category;
-import ch.hearc.SaphirLion.model.Media;
-import ch.hearc.SaphirLion.model.Type;
-import ch.hearc.SaphirLion.model.UserMedia;
-import ch.hearc.SaphirLion.model.User;
 
 @Component
 public class DataSeeder implements CommandLineRunner {
@@ -87,7 +85,6 @@ public class DataSeeder implements CommandLineRunner {
         media2.setType(type2);
         media2.setCategory(category2);
         // Test change order to see if it works when testing
-        // mediaRepository.findAllWithTypes()
         mediaRepository.saveAll(Arrays.asList(media2, media1));
 
         User user1 = new User();

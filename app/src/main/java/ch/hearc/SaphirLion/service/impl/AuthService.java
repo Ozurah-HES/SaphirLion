@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import ch.hearc.SaphirLion.model.User;
 import ch.hearc.SaphirLion.repository.UserRepository;
 import ch.hearc.SaphirLion.service.AuthService_I;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;
 
 @Service
 public class AuthService implements AuthService_I {

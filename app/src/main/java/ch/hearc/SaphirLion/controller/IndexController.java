@@ -1,5 +1,6 @@
 package ch.hearc.SaphirLion.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +12,8 @@ import jakarta.servlet.http.HttpSession;
 public class IndexController {
 
     @GetMapping({"/","/home", "/index"})
-    public String home(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
+    public String home(Model model, HttpSession session, @AuthenticationPrincipal User user) {
+        // User user = (User) session.getAttribute("user");
 
         model.addAttribute("currentPageName", "home");
         model.addAttribute("title", "Home");
@@ -21,13 +22,13 @@ public class IndexController {
     }
 
     // Temp 2nd page
-    @GetMapping({"/login"})
-    public String login(Model model, HttpSession session) {
+    @GetMapping({"/page2"})
+    public String page2(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
 
-        model.addAttribute("currentPageName", "login");
-        model.addAttribute("title", "Login");
+        model.addAttribute("currentPageName", "page2");
+        model.addAttribute("title", "page2");
         model.addAttribute("user", user);
-        return "login";
+        return "page2";
     }
 }

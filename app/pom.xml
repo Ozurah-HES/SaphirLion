@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.1</version>
+		<version>3.0.1</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ch.hearc.SaphirLion</groupId>
@@ -62,10 +62,11 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-crypto</artifactId>
-		</dependency> -->
+			<version>6.0.1</version>
+		</dependency>
 
 		<!-- spring security web -->
 		<dependency>
@@ -79,10 +80,10 @@
 		</dependency>
 
 		<!-- intégration avec thymeleaf -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.thymeleaf.extras</groupId>
-			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
-		</dependency>
+		<artifactId>thymeleaf-extras-springsecurity5</artifactId>
+		</dependency> -->
 	</dependencies>
 
 	<build>

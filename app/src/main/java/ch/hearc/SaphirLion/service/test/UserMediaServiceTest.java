@@ -5,7 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import ch.hearc.SaphirLion.model.UserMedia;
-import ch.hearc.SaphirLion.service.impl.AuthService;
+import ch.hearc.SaphirLion.repository.UserRepository;
 import ch.hearc.SaphirLion.service.impl.MediaService;
 import ch.hearc.SaphirLion.service.impl.UserMediaService;
 
@@ -13,7 +13,7 @@ import ch.hearc.SaphirLion.service.impl.UserMediaService;
 public class UserMediaServiceTest implements CommandLineRunner {
 
     @Autowired
-    AuthService auth;
+    UserRepository userRepository;
 
     @Autowired
     UserMediaService userMediaService;
@@ -23,22 +23,12 @@ public class UserMediaServiceTest implements CommandLineRunner {
     
     @Override
     public void run(String... args) throws Exception {
-        // In our version, the only way to manage with users, is to be the connected one
-        // but for testing, instead of authenticating, we could use directly UserRepository, it's a choice
-        var user = auth.authenticate("User 1", "password", null);
+        var user = userRepository.findByUsername("User 1");
         assert user != null;
 
         var medias = mediaService.readAll();
         assert medias != null && medias.size() > 0;
         
-        /*
-        public UserMedia read(Long id);
-        public UserMedia update(UserMedia userMedia);
-        public void delete(Long id);
-
-        public List<UserMedia> readAllOfUser(Long userId);
-         */
-
         // Create
         var newUserMedia = new UserMedia();
         newUserMedia.setUser(user);

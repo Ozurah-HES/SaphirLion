@@ -5,23 +5,21 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import ch.hearc.SaphirLion.model.Media;
-import ch.hearc.SaphirLion.service.impl.AuthService;
+import ch.hearc.SaphirLion.repository.UserRepository;
 import ch.hearc.SaphirLion.service.impl.MediaService;
 
 @Component
 public class MediaServiceTest implements CommandLineRunner {
 
     @Autowired
-    AuthService auth;
+    UserRepository userRepository;
 
     @Autowired
     MediaService mediaService;
     
     @Override
     public void run(String... args) throws Exception {
-        // In our version, the only way to manage with users, is to be the connected one
-        // but for testing, instead of authenticating, we could use directly UserRepository, it's a choice
-        var user = auth.authenticate("User 1", "password", null);
+        var user = userRepository.findByUsername("User 1");
         assert user != null;
 
         // Read type & category

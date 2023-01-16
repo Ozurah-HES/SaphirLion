@@ -16,6 +16,10 @@ import ch.hearc.SaphirLion.repository.UserRepository;
 import ch.hearc.SaphirLion.service.AuthService_I;
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * @deprecated Remplaced by Spring Security
+ */
+@Deprecated
 @Service
 public class AuthService implements AuthService_I {
     @Autowired

@@ -14,8 +14,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import ch.hearc.SaphirLion.service.impl.UserDetailServiceImpl;
+
 @Configuration
 @EnableWebSecurity
+@Profile(value="secure")
 public class SecurityConfiguration {    
 
 	@Bean
@@ -24,13 +27,31 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User
-                .withUsername("user")
-                .password(passwordEncoder().encode("password"))
-                .roles("USER")
-                .build();
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http
+			.authorizeRequests()
+			// .requestMatchers("/", "/home").permitAll()
+			.anyRequest().authenticated()
+			.and().formLogin().permitAll();
+		
+		http.logout()
+			.logoutSuccessUrl("/admin");
+		
+		
+		return http.build();
+	}
 
-        return new InMemoryUserDetailsManager(user);
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        // UserDetails user = User
+        //         .withUsername("user")
+        //         .password(passwordEncoder().encode("password"))
+        //         .roles("USER")
+        //         .build();
+
+        // return new InMemoryUserDetailsManager(user);
+
+        return new UserDetailServiceImpl();
     }
 }

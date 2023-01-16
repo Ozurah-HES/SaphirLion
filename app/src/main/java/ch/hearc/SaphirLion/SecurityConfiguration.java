@@ -13,45 +13,41 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import ch.hearc.SaphirLion.service.impl.UserDetailServiceImpl;
 
 @Configuration
 @EnableWebSecurity
-@Profile(value="secure")
-public class SecurityConfiguration {    
+@Profile(value = "secure")
+public class SecurityConfiguration {
 
-	@Bean
+    @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-			.authorizeRequests()
-			// .requestMatchers("/", "/home").permitAll()
-			.anyRequest().authenticated()
-			.and().formLogin().permitAll();
-		
-		http.logout()
-			.logoutSuccessUrl("/admin");
-		
-		
-		return http.build();
-	}
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // https://stackoverflow.com/questions/62531927/spring-security-redirect-to-static-resources-after-authentication
 
+        http.authorizeRequests()
+                .requestMatchers("/css/**", "/images/**").permitAll()
+                .requestMatchers("/", "/home", "/index").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin().permitAll();
+
+        http.logout()
+                // remove the logout confirmation
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/");
+
+        return http.build();
+    }
 
     @Bean
     public UserDetailsService userDetailsService() {
-        // UserDetails user = User
-        //         .withUsername("user")
-        //         .password(passwordEncoder().encode("password"))
-        //         .roles("USER")
-        //         .build();
-
-        // return new InMemoryUserDetailsManager(user);
-
         return new UserDetailServiceImpl();
     }
 }

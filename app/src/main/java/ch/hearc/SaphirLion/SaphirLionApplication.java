@@ -11,10 +11,4 @@ public class SaphirLionApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SaphirLionApplication.class, args);
 	}
-
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-    	return new BCryptPasswordEncoder();
-	}
-
 }

@@ -62,10 +62,10 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-crypto</artifactId>
-		</dependency>
+		</dependency> -->
 
 		<!-- spring security web -->
 		<dependency>

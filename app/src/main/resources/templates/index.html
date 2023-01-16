@@ -1,0 +1,36 @@
+<div th:replace="~{fragment/header}"></div>
+<p th:text="${currentPageName}"></p>
+
+
+<h1 th:text="${title}"></h1>
+
+<p>Bienvenue sur la page d'accueil !</p>
+
+<p th:if="${user == null}">
+	Vous n'êtes pas connecté.<br>
+	Pour gérez votre bibliothèque, veuillez vous identifier.
+</p>
+<p th:if="${user != null}">
+	Ravi de vous revoir <span class="fw-semibold text-info" th:text="${user.username}"></span> !
+</p>
+
+<h1>A propos</h1>
+
+<p>
+	Avec <strong>Saphir Lion</strong> ne soyez plus perdu dans les séries que vous avez, retrouvez rapidement votre
+	avancé !
+</p>
+<p>
+	Saphir Lion est une application web avec le framework Spring (Java) permettant de gérer sa bibliothèque de mangas
+	(ou autres livres).
+</p>
+<p>
+	L'application a été développée par <a href="https://github.com/Ozurah" target="_blank">Jonas Allemann</a> dans le
+	cadre du cours de "JEE/Spring" de 3ème année en développement logiciel, en ingénierie à la
+	<a href="https://he-arc.ch/" target="_blank">Haute Ecole Arc</a>.
+</p>
+<a href="https://he-arc.ch/" target="_blank">
+	<img src="../images/logo-he-arc.svg" alt="HE-Arc logo" width="300" />
+</a>
+
+<div th:replace="~{fragment/footer}"></div>

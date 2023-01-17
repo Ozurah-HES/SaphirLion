@@ -38,7 +38,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // https://stackoverflow.com/questions/62531927/spring-security-redirect-to-static-resources-after-authentication
 
-        http.authorizeRequests()
+        http.authorizeHttpRequests()
                 .requestMatchers("/css/**", "/images/**").permitAll()
                 .requestMatchers("/", "/home", "/index").permitAll()
                 .anyRequest().authenticated()

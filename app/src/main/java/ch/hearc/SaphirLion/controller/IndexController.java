@@ -6,29 +6,24 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import ch.hearc.SaphirLion.model.User;
+import ch.hearc.SaphirLion.utils.ControllerUtils;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class IndexController {
 
     @GetMapping({ "/", "/home", "/index" })
-    public String home(Model model, HttpSession session, @AuthenticationPrincipal User user) {
+    public String home(Model model, @AuthenticationPrincipal User user) {
         // User user = (User) session.getAttribute("user");
 
-        model.addAttribute("currentPageName", "home");
-        model.addAttribute("title", "Home");
-        model.addAttribute("user", user);
+        ControllerUtils.modelCommonAttribute(model, user, "home", "Home");
         return "index";
     }
 
     // Temp 2nd page
     @GetMapping({ "/page2" })
-    public String page2(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-
-        model.addAttribute("currentPageName", "page2");
-        model.addAttribute("title", "page2");
-        model.addAttribute("user", user);
+    public String page2(Model model, @AuthenticationPrincipal User user) {
+        ControllerUtils.modelCommonAttribute(model, user, "page2", "Page 2");
         return "page2";
     }
 }

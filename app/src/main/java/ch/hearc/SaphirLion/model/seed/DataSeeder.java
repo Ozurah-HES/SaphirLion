@@ -111,6 +111,24 @@ public class DataSeeder implements CommandLineRunner {
         userMedia2.setRemark("Remark 2");
         userMediaRepository.saveAll(Arrays.asList(userMedia1, userMedia2));
 
+
+        for (int i = 0; i < 30; i++) {
+            Media media = new Media();
+            media.setName("TheSerie Arc " + i);
+            media.setType(type1);
+            media.setCategory(category1);
+            mediaRepository.save(media);
+
+            UserMedia userMedia = new UserMedia();
+            userMedia.setUser(user1);
+            userMedia.setMedia(media);
+            userMedia.setNbOwned(100 + i);
+            userMedia.setNbPublished(200 + i);
+            userMedia.setLastSeen(i);
+            userMedia.setRemark("Big collection " + i);
+            userMediaRepository.save(userMedia);
+        }
+
         // READ DATA TEST :
 
         /*

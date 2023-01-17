@@ -1,0 +1,44 @@
+<div th:replace="~{fragment/header}"></div>
+<p th:text="${currentPageName}"></p>
+
+
+<h1 th:text="${title}"></h1>
+
+<!-- model.addAttribute("nbMedia", 111);
+model.addAttribute("nbMediaFinished", 222);
+model.addAttribute("nbMediaViewed", 333);
+model.addAttribute("nbMediaNotViewed", 444);
+model.addAttribute("nbMediaBuyed", 555);
+model.addAttribute("nbMediaNotBuyed", 666); -->
+
+<p>Vous avez <span th:text="${nbMedia}"></span> séries</p>
+<p>Vous en avez terminé <span th:text="${nbMediaFinished}"></span></p>
+<p>Vous avez déjà vu <span th:text="${nbMediaViewed}"> livres</span></p>
+<p>Vous en avez <span th:text="${nbMediaNotViewed}"> non vu</span></p>
+<p>Vous avez acheté <span th:text="${nbMediaBuyed}"></span> livres</p>
+<p>Il vous en manque <span th:text="${nbMediaNotBuyed}"></span></p>
+
+<a href="/media/add" method="get">Ajouter une série</a>
+
+<div th:each="myMedia : ${myMedias}">
+    <div><span th:text="${myMedia.id}"></span> <span th:text="${myMedia.media.name}"></span></div>
+    <div>
+        <a th:href="@{/media/edit/{id}(id=${myMedia.id})}" method="get">Éditer</a>
+    </div>
+    <div>
+        Dernier vu
+        <input type="number" th:value="${myMedia.lastSeen}" />
+    </div>
+    <div>
+        En ma possession
+        <input type="number" th:value="${myMedia.nbOwned}" />
+    </div>
+    <div>
+        Déjà paru
+        <input type="number" th:value="${myMedia.nbPublished}" />
+    </div>
+    
+    <div th:text="${myMedia.remark}"></div>
+</div>
+
+<div th:replace="~{fragment/footer}"></div>

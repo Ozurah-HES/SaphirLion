@@ -3,6 +3,8 @@ package ch.hearc.SaphirLion.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import ch.hearc.SaphirLion.model.UserMedia;
@@ -35,8 +37,14 @@ public class UserMediaService implements UserMediaService_I {
     }
 
     @Override
-    public List<UserMedia> readAllOfUser(Long userId) {
-        return userMediaRepository.findByUserId(userId);
+    public List<UserMedia> readAllOfUser(Long userId, Pageable pageable) {
+        return userMediaRepository.findByUserId(userId, pageable);
+    }
+
+    @Override
+    public Page<UserMedia> readAllOfUser2(Long userId, Pageable pageable) {
+        Pageable page = pageable;
+        return userMediaRepository.findByUserId2(userId, pageable);
     }
 
 }

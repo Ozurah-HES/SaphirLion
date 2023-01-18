@@ -1,0 +1,62 @@
+<div th:replace="~{fragment/header}"></div>
+<p th:text="${currentPageName}"></p>
+
+
+<h1 th:text="${title}"></h1>
+
+
+<div><span th:text="${myMedia.id}"></span> <span th:text="${selectedMedia?.name}"></span></div>
+
+<div th:text="${myMedia.remark}"></div>
+
+
+
+<form action="/tmp3" method="post" class="col-md-8 col-lg-6 col-xxl-4">
+<!-- <form th:action="@{/media/edit/{id}(id=${myMedia.id})}" method="post" class="col-md-8 col-lg-6 col-xxl-4"> -->
+    <!-- <div class="mb-3">
+        <label for="email" class="form-label">Adresse email</label>
+        <input id="email" class="form-control" name="email" type="email"
+            value="{{ old('email', $user->email) }}" required>
+    </div> -->
+
+    <input type="hidden" name="id" th:value="${myMedia.id}" />
+
+    <div class="mb-3">
+        <label for="mediaName" class="form-label">Média</label>
+        <input id="mediaName" name="mediaName" class="form-control form-control" list="dlOptionsMedia"
+            placeholder="Sélectionnez un existant ou écrivez en un nouveau" required=""
+            th:value="${selectedMedia?.name}">
+        <datalist id="dlOptionsMedia">
+            <th:block th:each="media : ${medias}">
+                <option th:value="@{${media.name} }"></option>
+            </th:block>
+        </datalist>
+    </div>
+
+    <div class="mb-3">
+        <label for="lastSeen" class="form-label">Dernier vu</label>
+        <input id="lastSeen" name="lastSeen" class="form-control" type="number" th:value="${myMedia.lastSeen}" />
+    </div>
+    <div class="mb-3">
+        <label for="nbOwned" class="form-label">En ma possession</label>
+        <input id="nbOwned" name="nbOwned" class="form-control" type="number" th:value="${myMedia.nbOwned}" />
+    </div>
+    <div class="mb-3">
+        <label for="nbPublished" class="form-label">Déjà paru</label>
+        <input id="nbPublished" name="nbPublished" class="form-control" type="number" th:value="${myMedia.nbPublished}" />
+    </div>
+    <div class="mb-3">
+        <label for="remark" class="form-label">Remarque</label>
+        <input id="remark" name="remark" class="form-control" type="text" th:value="${myMedia.remark}" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Modifier</button>
+</form>
+
+
+
+
+
+
+
+<div th:replace="~{fragment/footer}"></div>

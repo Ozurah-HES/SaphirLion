@@ -16,6 +16,7 @@ public class UserMediaService implements UserMediaService_I {
     @Autowired
     private UserMediaRepository userMediaRepository;
 
+    // TODO : Create and update are the same, merge them :)
     @Override
     public UserMedia create(UserMedia userMedia) {
         return userMediaRepository.save(userMedia);

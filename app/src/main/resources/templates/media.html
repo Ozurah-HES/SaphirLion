@@ -4,13 +4,6 @@
 
 <h1 th:text="${title}"></h1>
 
-<!-- model.addAttribute("nbMedia", 111);
-model.addAttribute("nbMediaFinished", 222);
-model.addAttribute("nbMediaViewed", 333);
-model.addAttribute("nbMediaNotViewed", 444);
-model.addAttribute("nbMediaBuyed", 555);
-model.addAttribute("nbMediaNotBuyed", 666); -->
-
 <p>Vous avez <span th:text="${nbMedia}"></span> séries</p>
 <p>Vous en avez terminé <span th:text="${nbMediaFinished}"></span></p>
 <p>Vous avez déjà vu <span th:text="${nbMediaViewed}"> livres</span></p>
@@ -46,13 +39,8 @@ model.addAttribute("nbMediaNotBuyed", 666); -->
         <ul class="pagination">
 
             <li class="page-item">
-
-
-                <a class="page-link" th:classappend="@{${pages.number} lt 1} ? 'disabled'" th:href="@{/media(page=${pages.number })}"
-                    rel="prev"> « Précédent </a>
-                <!-- <a th:if="@{${pages.number} le 1}" class="page-link disabled" aria-disabled="true"
-                    th:href="@{/media(page=${pages.number })}" rel="prev"> « Précédent </a> -->
-
+                <a class="page-link" th:classappend="@{${pages.number} lt 1} ? 'disabled'"
+                    th:href="@{/media(page=${pages.number })}" rel="prev"> « Précédent </a>
             </li>
 
             <li th:if="${pages.totalPages gt 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
@@ -63,17 +51,9 @@ model.addAttribute("nbMediaNotBuyed", 666); -->
             <li class="page-item">
                 <a class="page-link" th:classappend="@{${pages.number + 1} ge ${pages.totalPages} } ? 'disabled'"
                     th:href="@{/media(page=${pages.number + 2 })}" rel="next">Suivant »</a>
-                <!-- <a th:if="@{${pages.number + 1} ge ${pages.totalPages} }" class="page-link disabled"
-                    aria-disabled="true" th:href="@{/media(page=${pages.number + 2 })}" rel="next">Suivant »</a> -->
             </li>
         </ul>
     </nav>
-
-
-
-
-
-
 </div>
 
 <div th:replace="~{fragment/footer}"></div>

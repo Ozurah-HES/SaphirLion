@@ -28,11 +28,16 @@ public class MediaController {
     private UserMediaService userMediaService;
 
     @GetMapping({ "/media" })
-    public String home(Model model, @AuthenticationPrincipal User user,  @RequestParam("page") Optional<Integer> page, 
-    @RequestParam("size") Optional<Integer> size) {
+    public String home(Model model, @AuthenticationPrincipal User user,
+            @RequestParam("page") Optional<Integer> page) {
 
-      int currentPage = page.orElse(1);
-      int pageSize = size.orElse(5);
+        int currentPage = page.orElse(1);
+        int pageSize = 5;
+
+        if (currentPage < 1) {
+            currentPage = 1;
+        }
+
         ControllerUtils.modelCommonAttribute(model, user, "media", "Ma bibliothèque");
 
         model.addAttribute("nbMedia", 111);
@@ -42,21 +47,20 @@ public class MediaController {
         model.addAttribute("nbMediaBuyed", 555);
         model.addAttribute("nbMediaNotBuyed", 666);
 
-        Page<UserMedia> bookPage = userMediaService.readAllOfUser2(user.getId(), PageRequest.of(currentPage - 1, pageSize));
-        // List<UserMedia> um = userMediaService.readAllOfUser(user.getId(), PageRequest.of(0, 5));
-        model.addAttribute("myMedias", bookPage.getContent());
+        Page<UserMedia> um = userMediaService.readAllOfUser(
+                user.getId(),
+                PageRequest.of(currentPage - 1, pageSize));
 
+        model.addAttribute("myMedias", um.getContent());
+        model.addAttribute("pages", um);
 
-        model.addAttribute("bookPage", bookPage);
-
-        int totalPages = bookPage.getTotalPages();
+        int totalPages = um.getTotalPages();
         if (totalPages > 0) {
             List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                .boxed()
-                .collect(Collectors.toList());
+                    .boxed()
+                    .collect(Collectors.toList());
             model.addAttribute("pageNumbers", pageNumbers);
         }
-
 
         return "media";
     }

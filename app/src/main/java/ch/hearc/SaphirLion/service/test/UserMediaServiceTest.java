@@ -43,7 +43,7 @@ public class UserMediaServiceTest implements CommandLineRunner {
 
         // Read
         assert userMediaService.read(newUserMedia.getId()).equals(um);
-        var userMedias = userMediaService.readAllOfUser(user.getId());
+        var userMedias = userMediaService.readAllOfUser(user.getId(), null).getContent();
         assert userMedias != null;
         assert userMedias.size() > 0; // TODO : Can fail if db isn't seeded
 
@@ -60,7 +60,7 @@ public class UserMediaServiceTest implements CommandLineRunner {
 
         // Delete
         userMediaService.delete(um.getId());
-        userMedias = userMediaService.readAllOfUser(user.getId());
+        userMedias = userMediaService.readAllOfUser(user.getId(), null).getContent();
         assert !userMedias.contains(newUserMedia);
         um = userMediaService.read(um.getId());
         assert um == null;

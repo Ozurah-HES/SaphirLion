@@ -37,15 +37,43 @@ model.addAttribute("nbMediaNotBuyed", 666); -->
         Déjà paru
         <input type="number" th:value="${myMedia.nbPublished}" />
     </div>
-    
+
     <div th:text="${myMedia.remark}"></div>
 </div>
 
-<div th:if="${bookPage.totalPages > 0}" class="pagination"
-    th:each="pageNumber : ${pageNumbers}">
-    <a th:href="@{/media(size=${bookPage.size}, page=${pageNumber})}"
-        th:text=${pageNumber}
-        th:class="${pageNumber==bookPage.number + 1} ? active"></a>
+<div class="d-flex justify-content-center mt-3">
+    <nav role="navigation" aria-label="Pagination Navigation">
+        <ul class="pagination">
+
+            <li class="page-item">
+
+
+                <a class="page-link" th:classappend="@{${pages.number} lt 1} ? 'disabled'" th:href="@{/media(page=${pages.number })}"
+                    rel="prev"> « Précédent </a>
+                <!-- <a th:if="@{${pages.number} le 1}" class="page-link disabled" aria-disabled="true"
+                    th:href="@{/media(page=${pages.number })}" rel="prev"> « Précédent </a> -->
+
+            </li>
+
+            <li th:if="${pages.totalPages gt 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
+                <a th:href="@{/media(page=${pageNumber})}" th:text=${pageNumber} class="page-link"
+                    th:classappend="${pageNumber == pages.number + 1} ? 'active'"></a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" th:classappend="@{${pages.number + 1} ge ${pages.totalPages} } ? 'disabled'"
+                    th:href="@{/media(page=${pages.number + 2 })}" rel="next">Suivant »</a>
+                <!-- <a th:if="@{${pages.number + 1} ge ${pages.totalPages} }" class="page-link disabled"
+                    aria-disabled="true" th:href="@{/media(page=${pages.number + 2 })}" rel="next">Suivant »</a> -->
+            </li>
+        </ul>
+    </nav>
+
+
+
+
+
+
 </div>
 
 <div th:replace="~{fragment/footer}"></div>

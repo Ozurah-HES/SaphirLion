@@ -18,11 +18,5 @@ public interface UserMediaService_I {
     public void delete(Long id);
 
     // Other
-    public default List<UserMedia> readAllOfUser(Long userId) {
-        return readAllOfUser(userId, null);
-    }
-
-    public List<UserMedia> readAllOfUser(Long userId, Pageable pageable);
-
-    public Page<UserMedia> readAllOfUser2(Long userId, Pageable pageable);
+    public Page<UserMedia> readAllOfUser(Long userId, Pageable pageable);
 }

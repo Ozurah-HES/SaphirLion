@@ -37,14 +37,8 @@ public class UserMediaService implements UserMediaService_I {
     }
 
     @Override
-    public List<UserMedia> readAllOfUser(Long userId, Pageable pageable) {
+    public Page<UserMedia> readAllOfUser(Long userId, Pageable pageable) {
         return userMediaRepository.findByUserId(userId, pageable);
-    }
-
-    @Override
-    public Page<UserMedia> readAllOfUser2(Long userId, Pageable pageable) {
-        Pageable page = pageable;
-        return userMediaRepository.findByUserId2(userId, pageable);
     }
 
 }

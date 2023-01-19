@@ -8,19 +8,18 @@ import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ch.hearc.SaphirLion.model.Media;
 import ch.hearc.SaphirLion.model.User;
@@ -28,6 +27,8 @@ import ch.hearc.SaphirLion.model.UserMedia;
 import ch.hearc.SaphirLion.service.impl.MediaService;
 import ch.hearc.SaphirLion.service.impl.UserMediaService;
 import ch.hearc.SaphirLion.utils.ControllerUtils;
+import jakarta.validation.Valid;
+
 
 @Controller
 public class MediaController {
@@ -37,6 +38,9 @@ public class MediaController {
 
     @Autowired
     private MediaService mediaService;
+
+    @Autowired
+    private Validator validator;
 
     @GetMapping({ "/media" })
     public String index(Model model, @AuthenticationPrincipal User user,
@@ -79,14 +83,25 @@ public class MediaController {
     @GetMapping({ "/media/edit/{id}" })
     public String edit(Model model, @AuthenticationPrincipal User user, @PathVariable(required = true) Integer id) {
         ControllerUtils.modelCommonAttribute(model, user, "media edit", "Modification d'un média");
-        UserMedia um = userMediaService.read(id.longValue());
+
         List<Media> medias = mediaService.readAll();
+
+        UserMedia um;
+        if (model.containsAttribute("myMedia")) { // If back due to validation error, keep previous state
+            um = (UserMedia) model.getAttribute("myMedia");
+        } else {
+            um = userMediaService.read(id.longValue());
+            model.addAttribute("myMedia", um);
+        }
+
+        if (!model.containsAttribute("selectedMedia")) {
+            model.addAttribute("selectedMedia", um.getMedia());
+        }
 
         // TODO : Vérifier que le média apparien à l'utilisateur en cas d'édit
 
-        model.addAttribute("myMedia", um);
-        model.addAttribute("selectedMedia", um.getMedia());
         model.addAttribute("medias", medias);
+        model.addAttribute("errors", model.asMap().get("errors"));
         return "media.edit";
     }
 
@@ -96,37 +111,61 @@ public class MediaController {
 
         List<Media> medias = mediaService.readAll();
 
-        model.addAttribute("myMedia", new UserMedia());
-        model.addAttribute("selectedMedia", medias.size() > 0 ? medias.get(0) : null);
+        if (!model.containsAttribute("myMedia")) { // If back due to validation error, keep previous
+            model.addAttribute("myMedia", new UserMedia());
+        }
+        if (!model.containsAttribute("selectedMedia")) {
+            model.addAttribute("selectedMedia", medias.size() > 0 ? medias.get(0) : null);
+        }
+
         model.addAttribute("medias", medias);
+        model.addAttribute("errors", model.asMap().get("errors"));
         return "media.edit";
     }
 
     @PutMapping({ "/media/edit" })
-    public String edit(@ModelAttribute UserMedia userMedia, BindingResult errors, Model model,
+    public String edit(@Valid @ModelAttribute UserMedia userMedia, BindingResult errors,
+            RedirectAttributes redirectAttrs, Model model,
             @AuthenticationPrincipal User user, @RequestParam String mediaName) {
-        System.out.println("mediaName: " + mediaName);
-        System.out.println("userMedia: " + userMedia);
 
-        // TODO : Vérifier que le média apparient à l'utilisateur en cas d'édit
-
+        boolean isEdit = userMedia.getId() != null;
         Media m = mediaService.readAll().stream()
                 .filter(media -> media.getName().equals(mediaName))
                 .findFirst()
                 .orElse(null);
 
-        if (m == null) {
+        boolean isNewMedia = m == null;
 
+        if (isNewMedia) {
             m = new Media();
             m.setName(mediaName);
 
             // TODO (for next version) : add category and type choice possibility
             m.setCategory(mediaService.readAllCategories().get(0));
             m.setType(mediaService.readAllTypes().get(0));
+        }
 
+        // Validation
+        validator.validate(m, errors);
+        if (errors.hasErrors()) {
+            // flash attributes transmit is attributes to the model after the redirect
+            redirectAttrs.addFlashAttribute("errors", errors.getAllErrors());
+            redirectAttrs.addFlashAttribute("myMedia", userMedia);
+            redirectAttrs.addFlashAttribute("selectedMedia", m);
+
+            if (isEdit)
+                return "redirect:/media/edit/" + userMedia.getId();
+            else
+                return "redirect:/media/add";
+        }
+
+        // TODO : Vérifier que le média apparient à l'utilisateur en cas d'édit
+
+        if (isNewMedia) {
             mediaService.save(m);
         }
-        
+
+        // Link objects to userMedia
         userMedia.setMedia(m);
         userMedia.setUser(user);
 

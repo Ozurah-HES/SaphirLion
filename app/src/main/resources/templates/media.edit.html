@@ -2,6 +2,13 @@
 
 <h1 th:text="${title}"></h1>
 
+<div th:if="${errors}" class="alert alert-danger" role="alert">
+    <p>Erreur(s) :</p>
+    <ul class="mb-0">
+        <li th:each="error : ${errors}" th:text="${error.defaultMessage}"></li>
+    </ul>
+</div>
+
 <form action="/media/edit" th:method="PUT" class="col-md-8 col-lg-6 col-xxl-4">
     <input type="hidden" name="id" th:value="${myMedia.id}" />
 

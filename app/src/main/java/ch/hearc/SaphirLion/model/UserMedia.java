@@ -2,12 +2,18 @@ package ch.hearc.SaphirLion.model;
 
 import java.util.Objects;
 
+import org.springframework.validation.annotation.Validated;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class UserMedia {
@@ -23,21 +29,35 @@ public class UserMedia {
     @JoinColumn(name = "media_id", nullable = false)
     private Media media;
 
+    @Min(value = 0, message = "Le nombre de parution doit être positif")
     private int nbPublished;
 
+    @Min(value = 0, message = "Le nombre de possession doit être positif")
     private int nbOwned;
 
+    @Min(value = 0, message = "Le dernier vu doit être positif")
     private int lastSeen;
 
+    @Size(max = 255, message = "La remarque ne doit pas dépasser 255 caractères")
     private String remark;
+
+    @AssertTrue(message = "Le nombre de parution doit être supérieur au nombre de possession")
+    public boolean isNbPublishedGreaterThanNbOwned() {
+        return nbPublished >= nbOwned;
+    }
+
+    @AssertTrue(message = "Le nombre de parution doit être supérieur au nombre de vu")
+    public boolean isNbPublishedGreaterThanLastSeen() {
+        return nbPublished >= lastSeen;
+    }
 
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
-		this.id = id;
-	}
+        this.id = id;
+    }
 
     public User getUser() {
         return user;

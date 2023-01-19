@@ -14,10 +14,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ch.hearc.SaphirLion.model.Media;
@@ -76,7 +78,7 @@ public class MediaController {
 
     @GetMapping({ "/media/edit/{id}" })
     public String edit(Model model, @AuthenticationPrincipal User user, @PathVariable(required = true) Integer id) {
-        ControllerUtils.modelCommonAttribute(model, user, "media edit", "edit");
+        ControllerUtils.modelCommonAttribute(model, user, "media edit", "Modification d'un média");
         UserMedia um = userMediaService.read(id.longValue());
         List<Media> medias = mediaService.readAll();
 
@@ -90,7 +92,7 @@ public class MediaController {
 
     @GetMapping({ "/media/add" })
     public String add(Model model, @AuthenticationPrincipal User user) {
-        ControllerUtils.modelCommonAttribute(model, user, "media add", "add");
+        ControllerUtils.modelCommonAttribute(model, user, "media add", "Ajout d'un média");
 
         List<Media> medias = mediaService.readAll();
 
@@ -100,7 +102,7 @@ public class MediaController {
         return "media.edit";
     }
 
-    @PostMapping({ "/media/edit" })
+    @PutMapping({ "/media/edit" })
     public String edit(@ModelAttribute UserMedia userMedia, BindingResult errors, Model model,
             @AuthenticationPrincipal User user, @RequestParam String mediaName) {
         System.out.println("mediaName: " + mediaName);
@@ -130,6 +132,13 @@ public class MediaController {
 
         userMediaService.save(userMedia);
 
+        return "redirect:/media";
+    }
+
+    @DeleteMapping({ "/media/delete" })
+    public String delete(@ModelAttribute UserMedia userMedia) {
+        // TODO : Vérifier que le média apparient à l'utilisateur
+        userMediaService.delete(userMedia.getId());
         return "redirect:/media";
     }
 }

@@ -40,7 +40,7 @@ public class SecurityConfiguration {
         // csrf : https://www.baeldung.com/spring-security-csrf
         
         http.csrf().disable().authorizeHttpRequests()
-                .requestMatchers("/css/**", "/images/**").permitAll()
+                .requestMatchers("/js/**", "/css/**", "/images/**").permitAll()
                 .requestMatchers("/", "/home", "/index").permitAll()
                 .anyRequest().authenticated()
                 .and()

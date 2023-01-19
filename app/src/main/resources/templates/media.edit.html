@@ -1,17 +1,8 @@
 <div th:replace="~{fragment/header}"></div>
-<p th:text="${currentPageName}"></p>
-
 
 <h1 th:text="${title}"></h1>
 
-
-<div><span th:text="${myMedia.id}"></span> <span th:text="${selectedMedia?.name}"></span></div>
-
-<div th:text="${myMedia.remark}"></div>
-
-
-
-<form action="/media/edit" method="post" class="col-md-8 col-lg-6 col-xxl-4"> 
+<form action="/media/edit" th:method="PUT" class="col-md-8 col-lg-6 col-xxl-4">
     <input type="hidden" name="id" th:value="${myMedia.id}" />
 
     <div class="mb-3">
@@ -36,7 +27,8 @@
     </div>
     <div class="mb-3">
         <label for="nbPublished" class="form-label">Déjà paru</label>
-        <input id="nbPublished" name="nbPublished" class="form-control" type="number" th:value="${myMedia.nbPublished}" />
+        <input id="nbPublished" name="nbPublished" class="form-control" type="number"
+            th:value="${myMedia.nbPublished}" />
     </div>
     <div class="mb-3">
         <label for="remark" class="form-label">Remarque</label>
@@ -45,13 +37,41 @@
 
     <button type="submit" class="btn btn-primary" th:text="${myMedia.id} ? Modifier : Créer"></button>
     <a href="/media" class="btn btn-secondary">Annuler</a>
-    <a th:href="@{/media/delete/{id}(id=${myMedia.id})}" class="btn btn-danger">Supprimer</a>
+
+    <a th:if="${myMedia.id}" class="btn btn-danger bi bi-trash3" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        Supprimer</a>
 </form>
 
 
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border border-danger border-3">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-danger bi bi-exclamation-circle" id="deleteModalLabel">
+                    Confirmation de suppression</h1>
+                <button type="button" id="modalClose" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Souhaitez-vous réellement supprimer ce média ?</p>
+                <p>Si vous le supprimez, toutes les données associées le seront également.</p>
+                <p class="mb-0 text-danger bi bi-exclamation-square-fill"> Attention, cette action est irréversible.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <form th:action="@{/media/delete/{id}(id=${myMedia.id})}" th:method="DELETE" class="d-inline">
+                    <button type="submit" class="btn btn-danger bi bi-trash3" title="Delete"> Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-
-
+<script src="/js/modal-utils.js"></script>
+<script>
+    focusInput("deleteModal", "modalClose")
+</script>
 
 <div th:replace="~{fragment/footer}"></div>

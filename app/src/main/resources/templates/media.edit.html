@@ -11,14 +11,7 @@
 
 
 
-<form action="/tmp3" method="post" class="col-md-8 col-lg-6 col-xxl-4">
-<!-- <form th:action="@{/media/edit/{id}(id=${myMedia.id})}" method="post" class="col-md-8 col-lg-6 col-xxl-4"> -->
-    <!-- <div class="mb-3">
-        <label for="email" class="form-label">Adresse email</label>
-        <input id="email" class="form-control" name="email" type="email"
-            value="{{ old('email', $user->email) }}" required>
-    </div> -->
-
+<form action="/media/edit" method="post" class="col-md-8 col-lg-6 col-xxl-4"> 
     <input type="hidden" name="id" th:value="${myMedia.id}" />
 
     <div class="mb-3">
@@ -50,7 +43,9 @@
         <input id="remark" name="remark" class="form-control" type="text" th:value="${myMedia.remark}" />
     </div>
 
-    <button type="submit" class="btn btn-primary">Modifier</button>
+    <button type="submit" class="btn btn-primary" th:text="${myMedia.id} ? Modifier : Créer"></button>
+    <a href="/media" class="btn btn-secondary">Annuler</a>
+    <a th:href="@{/media/delete/{id}(id=${myMedia.id})}" class="btn btn-danger">Supprimer</a>
 </form>
 
 

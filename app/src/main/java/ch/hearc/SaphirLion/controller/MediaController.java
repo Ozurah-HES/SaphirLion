@@ -100,13 +100,13 @@ public class MediaController {
         return "media.edit";
     }
 
-    @PostMapping({ "/media/edit", "/tmp3" })
+    @PostMapping({ "/media/edit" })
     public String edit(@ModelAttribute UserMedia userMedia, BindingResult errors, Model model,
             @AuthenticationPrincipal User user, @RequestParam String mediaName) {
         System.out.println("mediaName: " + mediaName);
         System.out.println("userMedia: " + userMedia);
 
-        // TODO : Vérifier que le média apparien à l'utilisateur en cas d'édit
+        // TODO : Vérifier que le média apparient à l'utilisateur en cas d'édit
 
         Media m = mediaService.readAll().stream()
                 .filter(media -> media.getName().equals(mediaName))
@@ -114,19 +114,21 @@ public class MediaController {
                 .orElse(null);
 
         if (m == null) {
-            // TODO : Add category + type in form
-            // TODO Add security if category or type not exist
+
             m = new Media();
             m.setName(mediaName);
+
+            // TODO (for next version) : add category and type choice possibility
             m.setCategory(mediaService.readAllCategories().get(0));
             m.setType(mediaService.readAllTypes().get(0));
-            mediaService.create(m);
+
+            mediaService.save(m);
         }
-        // TODO remplace to service "findByName"
+        
         userMedia.setMedia(m);
         userMedia.setUser(user);
 
-        userMediaService.update(userMedia);
+        userMediaService.save(userMedia);
 
         return "redirect:/media";
     }

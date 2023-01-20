@@ -6,3 +6,11 @@
 .text-multiline {
   white-space: pre-wrap;
 }
+
+.media-advence-color-missing { 
+  color: #FF5000;
+}
+
+.media-advence-color-ok {
+  color: #0EE000;
+}

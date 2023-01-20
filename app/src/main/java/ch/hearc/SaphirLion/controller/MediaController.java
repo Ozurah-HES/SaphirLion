@@ -51,7 +51,7 @@ public class MediaController {
             @RequestParam("page") Optional<Integer> page) {
 
         int currentPage = page.orElse(1);
-        int pageSize = 5;
+        int pageSize = 10;
 
         if (currentPage < 1) {
             currentPage = 1;

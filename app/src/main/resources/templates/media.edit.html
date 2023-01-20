@@ -1,0 +1,81 @@
+<div th:replace="~{fragment/header}"></div>
+
+<h1 th:text="${title}"></h1>
+
+<div th:replace="~{fragment/errors.info}"></div>
+
+<form action="/media/edit" th:method="PUT" class="col-md-8 col-lg-6 col-xxl-4">
+    <input type="hidden" name="id" th:value="${myMedia.id}" />
+
+    <div class="mb-3">
+        <label for="mediaName" class="form-label">Média</label>
+        <input id="mediaName" name="mediaName" class="form-control form-control" list="dlOptionsMedia"
+            placeholder="Sélectionnez un existant ou écrivez en un nouveau" required="" maxlength="255"
+            th:value="${selectedMedia?.name}">
+        <datalist id="dlOptionsMedia">
+            <th:block th:each="media : ${medias}">
+                <option th:value="@{${media.name} }"></option>
+            </th:block>
+        </datalist>
+    </div>
+
+    <div class="mb-3">
+        <label for="lastSeen" class="form-label">Dernier vu</label>
+        <input id="lastSeen" name="lastSeen" class="form-control" type="number" min="0"
+            th:value="${myMedia.lastSeen}" />
+    </div>
+    <div class="mb-3">
+        <label for="nbOwned" class="form-label">En ma possession</label>
+        <input id="nbOwned" name="nbOwned" class="form-control" type="number" min="0" th:value="${myMedia.nbOwned}" />
+    </div>
+    <div class="mb-3">
+        <label for="nbPublished" class="form-label">Déjà paru</label>
+        <input id="nbPublished" name="nbPublished" class="form-control" type="number" min="0"
+            th:value="${myMedia.nbPublished}" />
+    </div>
+    <div class="mb-3">
+        <label for="remark" class="form-label">Remarque</label>
+        <input id="remark" name="remark" class="form-control" type="text" th:value="${myMedia.remark}"
+            maxlength="255" />
+    </div>
+
+    <button type="submit" class="btn btn-success bi bi-check2-circle" th:text="${myMedia.id} ? ' Modifier' : ' Créer'"></button>
+    <a href="/media" class="btn btn-secondary bi bi-slash-circle"> Annuler</a>
+
+    <a th:if="${myMedia.id}" class="btn btn-danger bi bi-trash3" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        Supprimer</a>
+</form>
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border border-danger border-3">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-danger bi bi-exclamation-circle" id="deleteModalLabel">
+                    Confirmation de suppression</h1>
+                <button type="button" id="modalClose" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Souhaitez-vous réellement supprimer ce média ?</p>
+                <p>Si vous le supprimez, toutes les données associées le seront également.</p>
+                <p class="mb-0 text-danger bi bi-exclamation-square-fill"> Attention, cette action est irréversible.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <form th:action="@{/media/delete/{id}(id=${myMedia.id})}" th:method="DELETE" class="d-inline">
+                    <button type="submit" class="btn btn-danger bi bi-trash3" title="Delete"> Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="/js/modal-utils.js"></script>
+<script>
+    focusInput("deleteModal", "modalClose")
+</script>
+
+<div th:replace="~{fragment/footer}"></div>

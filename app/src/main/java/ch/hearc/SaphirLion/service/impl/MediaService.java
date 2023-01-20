@@ -25,19 +25,15 @@ public class MediaService implements MediaService_I {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    // Create & Update, the save works for both
     @Override
-    public Media create(Media media) {
+    public Media save(Media media) {
         return mediaRepository.save(media);
     }
 
     @Override
     public Media read(Long id) {
         return mediaRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public Media update(Media media) {
-        return mediaRepository.save(media);
     }
 
     @Override

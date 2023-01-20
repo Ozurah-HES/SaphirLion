@@ -1,0 +1,6 @@
+<div th:if="${errors}" class="alert alert-danger" role="alert">
+    <p>Erreur(s) :</p>
+    <ul class="mb-0">
+        <li th:each="error : ${errors}" th:text="${error.defaultMessage}"></li>
+    </ul>
+</div>

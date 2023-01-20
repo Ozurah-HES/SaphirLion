@@ -37,9 +37,10 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // https://stackoverflow.com/questions/62531927/spring-security-redirect-to-static-resources-after-authentication
-
-        http.authorizeHttpRequests()
-                .requestMatchers("/css/**", "/images/**").permitAll()
+        // csrf : https://www.baeldung.com/spring-security-csrf
+        
+        http.csrf().disable().authorizeHttpRequests()
+                .requestMatchers("/js/**", "/css/**", "/images/**").permitAll()
                 .requestMatchers("/", "/home", "/index").permitAll()
                 .anyRequest().authenticated()
                 .and()

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import ch.hearc.SaphirLion.model.User;
 import ch.hearc.SaphirLion.utils.ControllerUtils;
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class IndexController {

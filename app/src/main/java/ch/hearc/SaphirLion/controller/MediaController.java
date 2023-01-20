@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,9 +28,8 @@ import ch.hearc.SaphirLion.model.UserMedia;
 import ch.hearc.SaphirLion.service.impl.MediaService;
 import ch.hearc.SaphirLion.service.impl.UserMediaService;
 import ch.hearc.SaphirLion.utils.ControllerUtils;
-import ch.hearc.SaphirLion.validator.BelongValidator;
+import ch.hearc.SaphirLion.validator.BelongConnectedValidator;
 import jakarta.validation.Valid;
-
 
 @Controller
 public class MediaController {
@@ -43,7 +43,8 @@ public class MediaController {
     @Autowired
     private Validator validator;
 
-    @Autowired BelongValidator belongValidator;
+    @Autowired
+    BelongConnectedValidator belongValidator;
 
     @GetMapping({ "/media" })
     public String index(Model model, @AuthenticationPrincipal User user,
@@ -84,7 +85,9 @@ public class MediaController {
     }
 
     @GetMapping({ "/media/edit/{id}" })
-    public String edit(Model model, @AuthenticationPrincipal User user, @PathVariable(required = true) Integer id) {
+    public String edit(
+            RedirectAttributes redirectAttrs, Model model, @AuthenticationPrincipal User user,
+            @PathVariable(required = true) Integer id) {
         ControllerUtils.modelCommonAttribute(model, user, "media edit", "Modification d'un média");
 
         List<Media> medias = mediaService.readAll();
@@ -101,7 +104,15 @@ public class MediaController {
             model.addAttribute("selectedMedia", um.getMedia());
         }
 
-        // TODO : Vérifier que le média apparien à l'utilisateur en cas d'édit
+        BindingResult belongErrors = new BeanPropertyBindingResult(um, "UserMedia");
+        belongValidator.validate(um, belongErrors);
+        if (belongErrors.hasErrors()) {
+            // TODO : For now, we assume the only possible error here is that the userMedia
+            // does not belong to the user
+            redirectAttrs.addFlashAttribute("errors", belongErrors.getAllErrors());
+
+            return "redirect:/media";
+        }
 
         model.addAttribute("medias", medias);
         model.addAttribute("errors", model.asMap().get("errors"));
@@ -165,8 +176,6 @@ public class MediaController {
                 return "redirect:/media/add";
         }
 
-        // TODO : Vérifier que le média apparient à l'utilisateur en cas d'édit
-
         if (isNewMedia) {
             mediaService.save(m);
         }
@@ -179,9 +188,22 @@ public class MediaController {
         return "redirect:/media";
     }
 
-    @DeleteMapping({ "/media/delete" })
-    public String delete(@ModelAttribute UserMedia userMedia) {
-        // TODO : Vérifier que le média apparient à l'utilisateur
+    @DeleteMapping({ "/media/delete/{id}" })
+    public String delete(@ModelAttribute UserMedia userMedia, BindingResult errors,
+            RedirectAttributes redirectAttrs, @AuthenticationPrincipal User user,
+            @PathVariable(required = true) Integer id) {
+        userMedia.setId(id.longValue());
+        userMedia.setUser(user);
+
+        belongValidator.validate(userMedia, errors);
+        if (errors.hasErrors()) {
+            // TODO : For now, we assume the only possible error here is that the userMedia
+            // does not belong to the user
+            redirectAttrs.addFlashAttribute("errors", errors.getAllErrors());
+
+            return "redirect:/media";
+        }
+
         userMediaService.delete(userMedia.getId());
         return "redirect:/media";
     }

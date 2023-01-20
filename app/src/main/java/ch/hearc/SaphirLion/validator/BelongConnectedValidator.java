@@ -1,6 +1,7 @@
 package ch.hearc.SaphirLion.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -9,7 +10,7 @@ import ch.hearc.SaphirLion.model.UserMedia;
 import ch.hearc.SaphirLion.repository.UserMediaRepository;
 
 // https://www.baeldung.com/spring-mvc-custom-validator
-public class BelongValidator implements Validator {
+public class BelongConnectedValidator implements Validator {
 
     @Autowired
     private UserMediaRepository userMediaRepository;
@@ -26,9 +27,11 @@ public class BelongValidator implements Validator {
             return;
         }
 
-        User user = userMedia.getUser();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         if (user == null) {
-            errors.rejectValue("user", "userMedia.user.null", "L'utilisateur du média spécifié n'a pas été défini");
+            errors.rejectValue("user", "userMedia.user.null",
+                    "Aucun utilisateur connecté, impossible de savoir cet objet vous appartient");
             return;
         }
 
@@ -36,6 +39,5 @@ public class BelongValidator implements Validator {
         if (!result) {
             errors.rejectValue("user", "userMedia.user.notBelong", "Ce média ne vous appartient pas");
         }
-        
     }
 }

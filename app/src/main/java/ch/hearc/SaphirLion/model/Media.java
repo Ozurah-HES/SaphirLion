@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -21,7 +22,8 @@ public class Media {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    @Size(max = 255, message = "Le nom du média ne doit pas dépasser 255 caractères")
+    @Size(min = 1, max = 255, message = "Le nom du média ne doit pas dépasser 255 caractères")
+    @NotBlank(message = "Le nom du média ne doit pas être vide")
     private String name;
 
     @ManyToOne

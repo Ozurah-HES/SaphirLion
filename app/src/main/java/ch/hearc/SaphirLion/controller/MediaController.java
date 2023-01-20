@@ -27,6 +27,7 @@ import ch.hearc.SaphirLion.model.UserMedia;
 import ch.hearc.SaphirLion.service.impl.MediaService;
 import ch.hearc.SaphirLion.service.impl.UserMediaService;
 import ch.hearc.SaphirLion.utils.ControllerUtils;
+import ch.hearc.SaphirLion.validator.BelongValidator;
 import jakarta.validation.Valid;
 
 
@@ -41,6 +42,8 @@ public class MediaController {
 
     @Autowired
     private Validator validator;
+
+    @Autowired BelongValidator belongValidator;
 
     @GetMapping({ "/media" })
     public String index(Model model, @AuthenticationPrincipal User user,
@@ -128,6 +131,8 @@ public class MediaController {
             RedirectAttributes redirectAttrs, Model model,
             @AuthenticationPrincipal User user, @RequestParam String mediaName) {
 
+        userMedia.setUser(user);
+
         boolean isEdit = userMedia.getId() != null;
         Media m = mediaService.readAll().stream()
                 .filter(media -> media.getName().equals(mediaName))
@@ -147,6 +152,7 @@ public class MediaController {
 
         // Validation
         validator.validate(m, errors);
+        belongValidator.validate(userMedia, errors);
         if (errors.hasErrors()) {
             // flash attributes transmit is attributes to the model after the redirect
             redirectAttrs.addFlashAttribute("errors", errors.getAllErrors());
@@ -167,7 +173,6 @@ public class MediaController {
 
         // Link objects to userMedia
         userMedia.setMedia(m);
-        userMedia.setUser(user);
 
         userMediaService.save(userMedia);
 

@@ -2,7 +2,6 @@ package ch.hearc.SaphirLion.model;
 
 import java.util.Objects;
 
-import ch.hearc.SaphirLion.annotations.BelongConstraint;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -47,11 +46,6 @@ public class UserMedia {
     @AssertTrue(message = "Le nombre de parution doit être supérieur au nombre de vu")
     public boolean isNbPublishedGreaterThanLastSeen() {
         return nbPublished >= lastSeen;
-    }
-
-    @BelongConstraint(message = "Le média ne vous appartient pas")
-    public UserMedia isRealyOwned() {
-        return this;
     }
 
     public Long getId() {

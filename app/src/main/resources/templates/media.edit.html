@@ -15,7 +15,7 @@
     <div class="mb-3">
         <label for="mediaName" class="form-label">Média</label>
         <input id="mediaName" name="mediaName" class="form-control form-control" list="dlOptionsMedia"
-            placeholder="Sélectionnez un existant ou écrivez en un nouveau" required=""
+            placeholder="Sélectionnez un existant ou écrivez en un nouveau" required="" maxlength="255"
             th:value="${selectedMedia?.name}">
         <datalist id="dlOptionsMedia">
             <th:block th:each="media : ${medias}">
@@ -26,20 +26,22 @@
 
     <div class="mb-3">
         <label for="lastSeen" class="form-label">Dernier vu</label>
-        <input id="lastSeen" name="lastSeen" class="form-control" type="number" th:value="${myMedia.lastSeen}" />
+        <input id="lastSeen" name="lastSeen" class="form-control" type="number" min="0"
+            th:value="${myMedia.lastSeen}" />
     </div>
     <div class="mb-3">
         <label for="nbOwned" class="form-label">En ma possession</label>
-        <input id="nbOwned" name="nbOwned" class="form-control" type="number" th:value="${myMedia.nbOwned}" />
+        <input id="nbOwned" name="nbOwned" class="form-control" type="number" min="0" th:value="${myMedia.nbOwned}" />
     </div>
     <div class="mb-3">
         <label for="nbPublished" class="form-label">Déjà paru</label>
-        <input id="nbPublished" name="nbPublished" class="form-control" type="number"
+        <input id="nbPublished" name="nbPublished" class="form-control" type="number" min="0"
             th:value="${myMedia.nbPublished}" />
     </div>
     <div class="mb-3">
         <label for="remark" class="form-label">Remarque</label>
-        <input id="remark" name="remark" class="form-control" type="text" th:value="${myMedia.remark}" />
+        <input id="remark" name="remark" class="form-control" type="text" th:value="${myMedia.remark}"
+            maxlength="255" />
     </div>
 
     <button type="submit" class="btn btn-primary" th:text="${myMedia.id} ? Modifier : Créer"></button>

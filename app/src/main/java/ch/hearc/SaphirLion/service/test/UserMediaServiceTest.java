@@ -38,7 +38,7 @@ public class UserMediaServiceTest implements CommandLineRunner {
         newUserMedia.setNbPublished(2);
         newUserMedia.setRemark("Test remark");
 
-        var um = userMediaService.create(newUserMedia);
+        var um = userMediaService.save(newUserMedia);
         assert um.equals(newUserMedia);
 
         // Read
@@ -52,7 +52,7 @@ public class UserMediaServiceTest implements CommandLineRunner {
         newUserMedia.setNbOwned(2);
         newUserMedia.setNbPublished(3);
         newUserMedia.setRemark("Updated remark");
-        um = userMediaService.update(newUserMedia);
+        um = userMediaService.save(newUserMedia);
         assert um.getLastSeen() == 1;
         assert um.getNbOwned() == 2;
         assert um.getNbPublished() == 3;

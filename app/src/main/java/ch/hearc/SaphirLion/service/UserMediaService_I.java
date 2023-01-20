@@ -8,12 +8,10 @@ import org.springframework.data.domain.Pageable;
 import ch.hearc.SaphirLion.model.UserMedia;
 
 public interface UserMediaService_I {
-    // CRUD
-    public UserMedia create(UserMedia userMedia);
+    // CRUD (Create & Update are the same --> save)
+    public UserMedia save(UserMedia userMedia);
 
     public UserMedia read(Long id);
-
-    public UserMedia update(UserMedia userMedia);
 
     public void delete(Long id);
 

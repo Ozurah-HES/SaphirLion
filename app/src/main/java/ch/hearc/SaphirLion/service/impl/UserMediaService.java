@@ -1,7 +1,5 @@
 package ch.hearc.SaphirLion.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,19 +14,15 @@ public class UserMediaService implements UserMediaService_I {
     @Autowired
     private UserMediaRepository userMediaRepository;
 
+    // Create & Update, the save works for both
     @Override
-    public UserMedia create(UserMedia userMedia) {
+    public UserMedia save(UserMedia userMedia) {
         return userMediaRepository.save(userMedia);
     }
 
     @Override
     public UserMedia read(Long id) {
         return userMediaRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public UserMedia update(UserMedia userMedia) {
-        return userMediaRepository.save(userMedia);
     }
 
     @Override

@@ -7,12 +7,10 @@ import ch.hearc.SaphirLion.model.Media;
 import ch.hearc.SaphirLion.model.Type;
 
 public interface MediaService_I {
-    // CRUD
-    public Media create(Media media);
+    // CRUD (Create & Update are the same --> save)
+    public Media save(Media media);
 
     public Media read(Long id);
-
-    public Media update(Media media);
 
     public void delete(Long id);
 

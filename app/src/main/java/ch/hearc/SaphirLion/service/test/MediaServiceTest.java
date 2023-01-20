@@ -33,7 +33,7 @@ public class MediaServiceTest implements CommandLineRunner {
         newMedia.setName("Test media");
         newMedia.setType(types.get(0));
         newMedia.setCategory(categories.get(0));
-        var media = mediaService.create(newMedia);
+        var media = mediaService.save(newMedia);
         assert media.equals(newMedia);
         assert mediaService.read(newMedia.getId()).equals(media);
 
@@ -47,7 +47,7 @@ public class MediaServiceTest implements CommandLineRunner {
 
         // Update
         newMedia.setName("updated name");
-        media = mediaService.update(newMedia);
+        media = mediaService.save(newMedia);
         assert media.getName().equals("updated name");
 
         // Delete

@@ -8,6 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class UserMedia {
@@ -23,16 +26,34 @@ public class UserMedia {
     @JoinColumn(name = "media_id", nullable = false)
     private Media media;
 
+    @PositiveOrZero(message = "Le nombre de parution doit être positif")
     private int nbPublished;
 
+    @PositiveOrZero(message = "Le nombre de possession doit être positif")
     private int nbOwned;
 
+    @PositiveOrZero(message = "Le dernier vu doit être positif")
     private int lastSeen;
 
+    @Size(max = 255, message = "La remarque ne doit pas dépasser 255 caractères")
     private String remark;
+
+    @AssertTrue(message = "Le nombre de parution doit être supérieur au nombre de possession")
+    public boolean isNbPublishedGreaterThanNbOwned() {
+        return nbPublished >= nbOwned;
+    }
+
+    @AssertTrue(message = "Le nombre de parution doit être supérieur au nombre de vu")
+    public boolean isNbPublishedGreaterThanLastSeen() {
+        return nbPublished >= lastSeen;
+    }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public User getUser() {

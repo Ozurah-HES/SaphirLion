@@ -59,21 +59,33 @@ public class MediaController {
 
         ControllerUtils.modelCommonAttribute(model, user, "media", "Ma bibliothèque");
 
-        model.addAttribute("nbMedia", 111);
-        model.addAttribute("nbMediaFinished", 222);
-        model.addAttribute("nbMediaViewed", 333);
-        model.addAttribute("nbMediaNotViewed", 444);
-        model.addAttribute("nbMediaBuyed", 555);
-        model.addAttribute("nbMediaNotBuyed", 666);
+        // === User medias stats ===
 
-        Page<UserMedia> um = userMediaService.readAllOfUser(
+        // page set to null to retrieve all the user's medias
+        List<UserMedia> umList = userMediaService.readAllOfUser(user.getId(), null).getContent();
+
+        Long finished = umList.stream().filter(um -> um.getLastSeen() == um.getNbPublished()).count();
+        Long viewed = umList.stream().mapToLong(um -> um.getLastSeen()).sum();
+        Long notViewed = umList.stream().mapToLong(um -> um.getNbPublished()).sum() - viewed;
+        Long buyed = umList.stream().mapToLong(um -> um.getNbOwned()).sum();
+        Long notBuyed = umList.stream().mapToLong(um -> um.getNbPublished()).sum() - buyed;
+
+        model.addAttribute("nbMedia", umList.size());
+        model.addAttribute("nbMediaFinished", finished);
+        model.addAttribute("nbMediaViewed", viewed);
+        model.addAttribute("nbMediaNotViewed", notViewed);
+        model.addAttribute("nbMediaBuyed", buyed);
+        model.addAttribute("nbMediaNotBuyed", notBuyed);
+
+        // === Pagination for the view ===
+        Page<UserMedia> umPage = userMediaService.readAllOfUser(
                 user.getId(),
                 PageRequest.of(currentPage - 1, pageSize));
 
-        model.addAttribute("myMedias", um.getContent());
-        model.addAttribute("pages", um);
+        model.addAttribute("myMedias", umPage.getContent());
+        model.addAttribute("pages", umPage);
 
-        int totalPages = um.getTotalPages();
+        int totalPages = umPage.getTotalPages();
         if (totalPages > 0) {
             List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
                     .boxed()

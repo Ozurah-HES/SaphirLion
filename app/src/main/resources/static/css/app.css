@@ -7,6 +7,10 @@
   white-space: pre-wrap;
 }
 
+.w-80 {
+  width: 80%;
+}
+
 .media-advence-color-missing { 
   color: #FF5000;
 }

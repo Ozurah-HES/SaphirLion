@@ -1,9 +1,11 @@
 package ch.hearc.SaphirLion.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.springframework.web.server.ResponseStatusException;
 
 import ch.hearc.SaphirLion.model.User;
 import ch.hearc.SaphirLion.model.UserMedia;
@@ -37,7 +39,9 @@ public class BelongConnectedValidator implements Validator {
 
         boolean result = userMediaRepository.belongsToUser(user.getId(), userMedia.getId());
         if (!result) {
-            errors.rejectValue("user", "userMedia.user.notBelong", "Ce média ne vous appartient pas");
+            //errors.rejectValue("user", "userMedia.user.notBelong", "Ce média ne vous appartient pas");
+
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
 }

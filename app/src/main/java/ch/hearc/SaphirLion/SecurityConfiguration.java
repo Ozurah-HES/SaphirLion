@@ -5,7 +5,6 @@ import java.util.Locale;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,7 +18,6 @@ import ch.hearc.SaphirLion.service.impl.UserDetailServiceImpl;
 
 @Configuration
 @EnableWebSecurity
-@Profile(value = "secure")
 public class SecurityConfiguration {
 
     @Bean
@@ -41,6 +39,7 @@ public class SecurityConfiguration {
         
         http.csrf().disable().authorizeHttpRequests()
                 .requestMatchers("/js/**", "/css/**", "/images/**").permitAll()
+                .requestMatchers("/error/**").permitAll()
                 .requestMatchers("/", "/home", "/index").permitAll()
                 .anyRequest().authenticated()
                 .and()

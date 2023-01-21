@@ -1,5 +1,6 @@
 package ch.hearc.SaphirLion.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import ch.hearc.SaphirLion.model.Category;
@@ -18,6 +19,8 @@ public interface MediaService_I {
     public List<Media> readAll();
 
     public List<Media> readAllOfUser(Long userId);
+
+    public List<Media> readSortedAllUnowned(Long userId, Collection<Media> except);
 
     // Linked data
     public List<Type> readAllTypes();

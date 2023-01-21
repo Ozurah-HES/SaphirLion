@@ -1,5 +1,7 @@
 package ch.hearc.SaphirLion.service.impl;
 
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,5 +71,18 @@ public class MediaService implements MediaService_I {
     @Override
     public List<Category> readAllCategories() {
         return (List<Category>) categoryRepository.findAll();
+    }
+
+    @Override
+    public List<Media> readSortedAllUnowned(Long userId, Collection<Media> except) {
+        List<Media> medias = readAll();
+        List<Media> mediasOfUser = readAllOfUser(userId);
+        medias.removeAll(mediasOfUser);
+        if (except != null)
+            medias.addAll(except);
+
+        medias.sort(Comparator.comparing(Media::getName, String.CASE_INSENSITIVE_ORDER));
+
+        return medias;
     }
 }

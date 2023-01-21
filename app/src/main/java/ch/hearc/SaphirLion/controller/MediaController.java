@@ -1,5 +1,6 @@
 package ch.hearc.SaphirLion.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -102,8 +103,6 @@ public class MediaController {
             @PathVariable(required = true) Integer id) {
         ControllerUtils.modelCommonAttribute(model, user, "media edit", "Modification d'un média");
 
-        List<Media> medias = mediaService.readAll();
-
         UserMedia um;
         if (model.containsAttribute("myMedia")) { // If back due to validation error, keep previous state
             um = (UserMedia) model.getAttribute("myMedia");
@@ -119,12 +118,12 @@ public class MediaController {
         BindingResult belongErrors = new BeanPropertyBindingResult(um, "UserMedia");
         belongValidator.validate(um, belongErrors);
         if (belongErrors.hasErrors()) {
-            // TODO : For now, we assume the only possible error here is that the userMedia
-            // does not belong to the user
             redirectAttrs.addFlashAttribute("errors", belongErrors.getAllErrors());
 
             return "redirect:/media";
         }
+
+        List<Media> medias = mediaService.readSortedAllUnowned(user.getId(), Arrays.asList(um.getMedia()));
 
         model.addAttribute("medias", medias);
         model.addAttribute("errors", model.asMap().get("errors"));
@@ -135,7 +134,7 @@ public class MediaController {
     public String add(Model model, @AuthenticationPrincipal User user) {
         ControllerUtils.modelCommonAttribute(model, user, "media add", "Ajout d'un média");
 
-        List<Media> medias = mediaService.readAll();
+        List<Media> medias = mediaService.readSortedAllUnowned(user.getId(), null);
 
         if (!model.containsAttribute("myMedia")) { // If back due to validation error, keep previous
             model.addAttribute("myMedia", new UserMedia());
@@ -154,11 +153,13 @@ public class MediaController {
             RedirectAttributes redirectAttrs, Model model,
             @AuthenticationPrincipal User user, @RequestParam String mediaName) {
 
+        String trimmedMediaName = mediaName.trim();
+
         userMedia.setUser(user);
 
         boolean isEdit = userMedia.getId() != null;
         Media m = mediaService.readAll().stream()
-                .filter(media -> media.getName().equals(mediaName))
+                .filter(media -> media.getName().equals(trimmedMediaName))
                 .findFirst()
                 .orElse(null);
 
@@ -166,7 +167,7 @@ public class MediaController {
 
         if (isNewMedia) {
             m = new Media();
-            m.setName(mediaName);
+            m.setName(trimmedMediaName);
 
             // TODO (for next version) : add category and type choice possibility
             m.setCategory(mediaService.readAllCategories().get(0));

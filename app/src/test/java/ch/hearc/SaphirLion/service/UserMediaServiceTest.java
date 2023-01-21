@@ -1,16 +1,23 @@
-package ch.hearc.SaphirLion.service.test;
+package ch.hearc.SaphirLion.service;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import ch.hearc.SaphirLion.model.UserMedia;
 import ch.hearc.SaphirLion.repository.UserRepository;
 import ch.hearc.SaphirLion.service.impl.MediaService;
 import ch.hearc.SaphirLion.service.impl.UserMediaService;
 
-@Component
-public class UserMediaServiceTest implements CommandLineRunner {
+@SpringBootTest
+@TestPropertySource(locations = { "/application-test.properties", "/application-test-h2.properties" })
+public class UserMediaServiceTest {
 
     @Autowired
     UserRepository userRepository;
@@ -21,13 +28,15 @@ public class UserMediaServiceTest implements CommandLineRunner {
     @Autowired
     MediaService mediaService;
 
-    @Override
-    public void run(String... args) throws Exception {
+    public void dbCRUD() {
+        // user for testing
         var user = userRepository.findByUsername("User 1");
-        assert user != null;
+        assertNotNull(user);
 
+        // medias for testing (we need to asign a media to the UserMedia to create)
         var medias = mediaService.readAll();
-        assert medias != null && medias.size() > 0;
+        assertNotNull(medias);
+        assertTrue(medias.size() > 0);
 
         // Create
         var newUserMedia = new UserMedia();
@@ -39,30 +48,34 @@ public class UserMediaServiceTest implements CommandLineRunner {
         newUserMedia.setRemark("Test remark");
 
         var um = userMediaService.save(newUserMedia);
-        assert um.equals(newUserMedia);
+        assertEquals(um, newUserMedia);
 
         // Read
-        assert userMediaService.read(newUserMedia.getId()).equals(um);
+        assertEquals(userMediaService.read(newUserMedia.getId()), um);
+
         var userMedias = userMediaService.readAllOfUser(user.getId(), null).getContent();
-        assert userMedias != null;
-        assert userMedias.size() > 0; // TODO : Can fail if db isn't seeded
+        assertNotNull(userMedias);
+        assertTrue(userMedias.size() > 0);
 
         // Update
         newUserMedia.setLastSeen(1);
         newUserMedia.setNbOwned(2);
         newUserMedia.setNbPublished(3);
         newUserMedia.setRemark("Updated remark");
+
         um = userMediaService.save(newUserMedia);
-        assert um.getLastSeen() == 1;
-        assert um.getNbOwned() == 2;
-        assert um.getNbPublished() == 3;
-        assert um.getRemark().equals("Updated remark");
+
+        assertTrue(um.getLastSeen() == 1);
+        assertTrue(um.getNbOwned() == 2);
+        assertTrue(um.getNbPublished() == 3);
+        assertEquals(um.getRemark(), "Updated remark");
 
         // Delete
         userMediaService.delete(um.getId());
         userMedias = userMediaService.readAllOfUser(user.getId(), null).getContent();
-        assert !userMedias.contains(newUserMedia);
+        assertFalse(userMedias.contains(newUserMedia));
+
         um = userMediaService.read(um.getId());
-        assert um == null;
+        assertNull(um == null);
     }
 }

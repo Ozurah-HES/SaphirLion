@@ -39,11 +39,13 @@
             maxlength="255" />
     </div>
 
-    <button type="submit" class="btn btn-success bi bi-check2-circle" th:text="${myMedia.id} ? ' Modifier' : ' Créer'"></button>
+    <button type="submit" class="btn btn-success bi bi-check2-circle"
+        th:text="${myMedia.id} ? ' Modifier' : ' Créer'"></button>
     <a href="/media" class="btn btn-secondary bi bi-slash-circle"> Annuler</a>
 
-    <a th:if="${myMedia.id}" class="btn btn-danger bi bi-trash3" data-bs-toggle="modal" data-bs-target="#deleteModal">
-        Supprimer</a>
+    <button th:if="${myMedia.id}" type="button" class="btn btn-danger bi bi-trash3" data-bs-toggle="modal"
+        data-bs-target="#deleteModal">
+        Supprimer </button>
 </form>
 
 

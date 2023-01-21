@@ -76,7 +76,6 @@ public class DataSeederTest implements CommandLineRunner {
         User user2 = new User();
         user2.setUsername("User 2");
         user2.setPasswordAndCrypt("password");
-        var u = userRepository.findAll();
         userRepository.saveAll(Arrays.asList(user1, user2));
 
         // Seed userMedia

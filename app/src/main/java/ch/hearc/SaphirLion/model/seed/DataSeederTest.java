@@ -76,6 +76,7 @@ public class DataSeederTest implements CommandLineRunner {
         User user2 = new User();
         user2.setUsername("User 2");
         user2.setPasswordAndCrypt("password");
+        var u = userRepository.findAll();
         userRepository.saveAll(Arrays.asList(user1, user2));
 
         // Seed userMedia
@@ -111,43 +112,6 @@ public class DataSeederTest implements CommandLineRunner {
             userMedia.setLastSeen(i);
             userMedia.setRemark("Big collection " + i);
             userMediaRepository.save(userMedia);
-        }
-
-        // READ DATA TEST :
-
-        System.out.println("Test type->media findAllWithMedias() :");
-        var types = typeRepository.findAllWithMedias();
-        for (Type type : types) {
-            for (Media media : type.getMedias()) {
-                System.out.println(media.getName());
-            }
-        }
-
-        System.out.println("Test type->media findMediasByType() :");
-        for (Type type : types) {
-            for (Media media : typeRepository.findAllMedias(type.getId())) {
-                System.out.println(media.getName());
-            }
-        }
-
-        System.out.println("Test media->type findAll() :");
-        var medias = mediaRepository.findAll();
-        for (Media media : medias) {
-            System.out.println(media.getType().getType());
-        }
-
-        System.out.println("Test usermedia->media :");
-        var userMedias = userMediaRepository.findAll();
-        for (UserMedia um : userMedias) {
-            System.out.println(um.getMedia().getName() + " " + um.getMedia().getCategory().getCategory());
-        }
-
-        System.out.println("Test user->media :");
-        var users = userRepository.findAllWithUserMedias();
-        for (User user : users) {
-            for (UserMedia userMedia : user.getUserMedias()) {
-                System.out.println(userMedia.getMedia().getName() + " " + userMedia.getMedia().getType().getType());
-            }
         }
     }
 }

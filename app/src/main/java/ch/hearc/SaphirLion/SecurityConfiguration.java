@@ -19,7 +19,6 @@ import ch.hearc.SaphirLion.service.impl.UserDetailServiceImpl;
 
 @Configuration
 @EnableWebSecurity
-@Profile(value = "secure")
 public class SecurityConfiguration {
 
     @Bean

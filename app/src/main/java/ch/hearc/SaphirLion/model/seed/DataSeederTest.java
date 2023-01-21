@@ -4,7 +4,8 @@ import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.env.Environment;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import ch.hearc.SaphirLion.model.Category;
@@ -18,8 +19,10 @@ import ch.hearc.SaphirLion.repository.TypeRepository;
 import ch.hearc.SaphirLion.repository.UserMediaRepository;
 import ch.hearc.SaphirLion.repository.UserRepository;
 
+@Order(2)
+@Profile("seed-test")
 @Component
-public class DataSeeder implements CommandLineRunner {
+public class DataSeederTest implements CommandLineRunner {
 
     @Autowired
     private UserRepository userRepository;
@@ -36,57 +39,37 @@ public class DataSeeder implements CommandLineRunner {
     @Autowired
     private UserMediaRepository userMediaRepository;
 
-    @Autowired
-    private Environment env;
-
+    // Seed test data for testing with multiple values
+    // 2 user ("User 1", "User 2" ; with password "password")
     @Override
     public void run(String... args) throws Exception {
-        String ddlAuto = env.getProperty("spring.jpa.hibernate.ddl-auto");
-        if (ddlAuto == null) {
-            return;
-        }
-
-        if (ddlAuto.equals("create")
-                || ddlAuto.equals("create-drop")) {
-            seed();
-        }
-
-        // Seed only if new database
-        if (ddlAuto.equals("update")) {
-            if (userRepository.count() == 0
-                    && mediaRepository.count() == 0
-                    && typeRepository.count() == 0
-                    && categoryRepository.count() == 0
-                    && userMediaRepository.count() == 0) {
-                seed();
-            }
-        }
-    }
-
-    private void seed() {
+        // Seed types
         Type type1 = new Type();
-        type1.setType("Type 1");
+        type1.setType("Type Test 1");
         Type type2 = new Type();
-        type2.setType("Type 2");
+        type2.setType("Type Test 2");
         typeRepository.saveAll(Arrays.asList(type1, type2));
 
+        // Seed categories
         Category category1 = new Category();
-        category1.setCategory("Category 1");
+        category1.setCategory("Category Test 1");
         Category category2 = new Category();
-        category2.setCategory("Category 2");
+        category2.setCategory("Category Test 2");
         categoryRepository.saveAll(Arrays.asList(category1, category2));
 
+        // Seed medias
         Media media1 = new Media();
-        media1.setName("Media 1");
+        media1.setName("Media Test 1");
         media1.setType(type1);
         media1.setCategory(category1);
         Media media2 = new Media();
-        media2.setName("Media 2");
+        media2.setName("Media Test 2");
         media2.setType(type2);
         media2.setCategory(category2);
         // Test change order to see if it works when testing
         mediaRepository.saveAll(Arrays.asList(media2, media1));
 
+        // Seed users
         User user1 = new User();
         user1.setUsername("User 1");
         user1.setPasswordAndCrypt("password");
@@ -95,6 +78,7 @@ public class DataSeeder implements CommandLineRunner {
         user2.setPasswordAndCrypt("password");
         userRepository.saveAll(Arrays.asList(user1, user2));
 
+        // Seed userMedia
         UserMedia userMedia1 = new UserMedia();
         userMedia1.setUser(user1);
         userMedia1.setMedia(media1);
@@ -111,7 +95,7 @@ public class DataSeeder implements CommandLineRunner {
         userMedia2.setRemark("Remark 2");
         userMediaRepository.saveAll(Arrays.asList(userMedia1, userMedia2));
 
-
+        // Seed multiple userMedia for user "Test 1"
         for (int i = 0; i < 30; i++) {
             Media media = new Media();
             media.setName("TheSerie Arc " + i);
@@ -131,16 +115,6 @@ public class DataSeeder implements CommandLineRunner {
 
         // READ DATA TEST :
 
-        /*
-         * /!\ PROBLEME RENCONTRE : /!\
-         * // Pour avoir les medias chargés avec findAll(), il faudrais ajouter dans la
-         * classe Type :
-         * 
-         * @OneToMany(mappedBy = "type", fetch = FetchType.EAGER)
-         * private List<Media> medias = new ArrayList<Media>();
-         * 
-         * Je sais pas ce qui est le mieux
-         */
         System.out.println("Test type->media findAllWithMedias() :");
         var types = typeRepository.findAllWithMedias();
         for (Type type : types) {

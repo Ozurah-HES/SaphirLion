@@ -18,11 +18,4 @@ public class IndexController {
         ControllerUtils.modelCommonAttribute(model, user, "home", "Home");
         return "index";
     }
-
-    // Temp 2nd page
-    @GetMapping({ "/page2" })
-    public String page2(Model model, @AuthenticationPrincipal User user) {
-        ControllerUtils.modelCommonAttribute(model, user, "page2", "Page 2");
-        return "page2";
-    }
 }

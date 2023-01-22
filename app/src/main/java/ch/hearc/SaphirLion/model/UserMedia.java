@@ -2,6 +2,9 @@ package ch.hearc.SaphirLion.model;
 
 import java.util.Objects;
 
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
@@ -27,12 +31,17 @@ public class UserMedia {
     private Media media;
 
     @PositiveOrZero(message = "Le nombre de parution doit être positif")
+    @NotNull(message = "Le dernier vu ne doit pas être vide")  
+    @NumberFormat(style= Style.NUMBER) 
     private int nbPublished;
 
     @PositiveOrZero(message = "Le nombre de possession doit être positif")
+    @NotNull(message = "Le dernier vu ne doit pas être vide")  
+    @NumberFormat(style= Style.NUMBER) 
     private int nbOwned;
 
-    @PositiveOrZero(message = "Le dernier vu doit être positif")
+    @PositiveOrZero(message = "Le dernier vu doit être positif") 
+    @NotNull(message = "Le dernier vu ne doit pas être vide")  
     private int lastSeen;
 
     @Size(max = 255, message = "La remarque ne doit pas dépasser 255 caractères")

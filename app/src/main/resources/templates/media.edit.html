@@ -22,16 +22,16 @@
     <div class="mb-3">
         <label for="lastSeen" class="form-label">Dernier vu</label>
         <input id="lastSeen" name="lastSeen" class="form-control" type="number" min="0"
-            th:value="${myMedia.lastSeen}" />
+            th:value="${myMedia.lastSeen}" required/>
     </div>
     <div class="mb-3">
         <label for="nbOwned" class="form-label">En ma possession</label>
-        <input id="nbOwned" name="nbOwned" class="form-control" type="number" min="0" th:value="${myMedia.nbOwned}" />
+        <input id="nbOwned" name="nbOwned" class="form-control" type="number" min="0" th:value="${myMedia.nbOwned}" required/>
     </div>
     <div class="mb-3">
         <label for="nbPublished" class="form-label">Déjà paru</label>
         <input id="nbPublished" name="nbPublished" class="form-control" type="number" min="0"
-            th:value="${myMedia.nbPublished}" />
+            th:value="${myMedia.nbPublished}" required/>
     </div>
     <div class="mb-3">
         <label for="remark" class="form-label">Remarque</label>

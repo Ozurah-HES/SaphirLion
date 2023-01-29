@@ -112,7 +112,7 @@ public class MediaController {
         }
 
         if (!model.containsAttribute("selectedMedia")) {
-            model.addAttribute("selectedMedia", um.getMedia());
+            model.addAttribute("selectedMedia", um != null ? um.getMedia() : new Media());
         }
 
         BindingResult belongErrors = new BeanPropertyBindingResult(um, "UserMedia");
@@ -123,7 +123,7 @@ public class MediaController {
             return "redirect:/media";
         }
 
-        List<Media> medias = mediaService.readSortedAllUnowned(user.getId(), Arrays.asList(um.getMedia()));
+        List<Media> medias = mediaService.readSortedAllUnowned(user.getId(), um != null ? Arrays.asList(um.getMedia()) : null);
 
         model.addAttribute("medias", medias);
         model.addAttribute("errors", model.asMap().get("errors"));
@@ -173,6 +173,8 @@ public class MediaController {
             m.setCategory(mediaService.readAllCategories().get(0));
             m.setType(mediaService.readAllTypes().get(0));
         }
+
+        userMedia.setMedia(m);
 
         // Validation
         validator.validate(m, errors);

@@ -14,7 +14,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
-import ch.hearc.SaphirLion.service.impl.UserDetailServiceImpl;
+import ch.hearc.SaphirLion.service.impl.UserDetailService;
 
 @Configuration
 @EnableWebSecurity
@@ -55,6 +55,6 @@ public class SecurityConfiguration {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserDetailServiceImpl();
+        return new UserDetailService();
     }
 }

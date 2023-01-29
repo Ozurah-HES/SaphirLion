@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ch.hearc.SaphirLion.model.User;
 import ch.hearc.SaphirLion.repository.UserRepository;
 
-public class UserDetailServiceImpl implements UserDetailsService {
+public class UserDetailService implements UserDetailsService {
 
 	@Autowired
 	private UserRepository userRepository;

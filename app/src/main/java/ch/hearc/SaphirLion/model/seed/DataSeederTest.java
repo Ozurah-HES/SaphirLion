@@ -19,6 +19,10 @@ import ch.hearc.SaphirLion.repository.TypeRepository;
 import ch.hearc.SaphirLion.repository.UserMediaRepository;
 import ch.hearc.SaphirLion.repository.UserRepository;
 
+/**
+ * <p>Seed test data for testing with multiple values for each table</p>
+ * <p>Available users : "User 1", "User 2" ; with password "password"</p>
+ */
 @Order(2)
 @Profile("seed-test")
 @Component
@@ -39,8 +43,6 @@ public class DataSeederTest implements CommandLineRunner {
     @Autowired
     private UserMediaRepository userMediaRepository;
 
-    // Seed test data for testing with multiple values
-    // 2 user ("User 1", "User 2" ; with password "password")
     @Override
     public void run(String... args) throws Exception {
         // Seed types

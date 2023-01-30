@@ -12,6 +12,9 @@ import ch.hearc.SaphirLion.repository.TypeRepository;
 import ch.hearc.SaphirLion.repository.UserMediaRepository;
 import ch.hearc.SaphirLion.repository.UserRepository;
 
+/**
+ * Clean the database tables
+ */
 @Order(1)
 @Profile({"clean-db", "seed-test"})
 @Component

@@ -13,7 +13,7 @@ public class IndexController {
 
     @GetMapping({ "/", "/home", "/index" })
     public String home(Model model, @AuthenticationPrincipal User user) {
-        // User user = (User) session.getAttribute("user");
+        // User user = (User) session.getAttribute("user"); // If using the old AuthService instead of Spring Security
 
         ControllerUtils.modelCommonAttribute(model, user, "home", "Home");
         return "index";

@@ -16,6 +16,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
+/**
+ * <p>The pivot table between user and media.</p>
+ * <p>It contains the current information about the progression of the user on the media</p>
+ */
 @Entity
 public class UserMedia {
     @Id

@@ -11,8 +11,10 @@ import ch.hearc.SaphirLion.utils.ControllerUtils;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 
-// https://www.baeldung.com/spring-boot-custom-error-page
-
+/**
+ * Custom error controller to handle HTTP errors
+ * @see also Source : {@link} https://www.baeldung.com/spring-boot-custom-error-page
+ */
 @Controller
 public class MyErrorController implements ErrorController {
     @RequestMapping("/error")

@@ -34,7 +34,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // https://stackoverflow.com/questions/62531927/spring-security-redirect-to-static-resources-after-authentication
+        // strange redirect to image when login success : https://stackoverflow.com/questions/62531927/spring-security-redirect-to-static-resources-after-authentication
         // csrf : https://www.baeldung.com/spring-security-csrf
         
         http.csrf().disable().authorizeHttpRequests()

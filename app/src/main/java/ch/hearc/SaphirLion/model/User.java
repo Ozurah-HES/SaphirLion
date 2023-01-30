@@ -17,8 +17,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+/**
+ * The user of the application
+ * @note The table name is "UserAccount" because "User" is a reserved word in H2 DB
+ */
 @Entity
-@Table(name = "UserAccount") // cannot just be "User" because it's a reserved word in H2
+@Table(name = "UserAccount")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

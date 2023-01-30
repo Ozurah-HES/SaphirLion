@@ -10,6 +10,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
+/**
+ * The category of a media, like "main", "spin-off", "sequel", ...
+ */
 @Entity
 public class Category {
     @Id

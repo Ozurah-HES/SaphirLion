@@ -34,5 +34,4 @@ public class UserMediaService implements UserMediaService_I {
     public Page<UserMedia> readAllOfUser(Long userId, Pageable pageable) {
         return userMediaRepository.findByUserId(userId, pageable);
     }
-
 }

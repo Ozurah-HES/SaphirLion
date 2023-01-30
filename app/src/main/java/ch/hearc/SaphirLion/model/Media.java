@@ -15,6 +15,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+/**
+ * <p>A media, like "One Piece", "Naruto", ...</p>
+ * <p>It is linked to a type and a category</p>
+ */
 @Entity
 public class Media {
     @Id

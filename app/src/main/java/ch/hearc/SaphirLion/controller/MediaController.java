@@ -104,9 +104,10 @@ public class MediaController {
         ControllerUtils.modelCommonAttribute(model, user, "media edit", "Modification d'un média");
 
         UserMedia um;
+        // Retrieve the media
         if (model.containsAttribute("myMedia")) { // If back due to validation error, keep previous state
             um = (UserMedia) model.getAttribute("myMedia");
-        } else {
+        } else { // get the specified media from the URI
             um = userMediaService.read(id.longValue());
             model.addAttribute("myMedia", um);
         }
@@ -115,6 +116,7 @@ public class MediaController {
             model.addAttribute("selectedMedia", um != null ? um.getMedia() : new Media());
         }
 
+        // Validation
         BindingResult belongErrors = new BeanPropertyBindingResult(um, "UserMedia");
         belongValidator.validate(um, belongErrors);
         if (belongErrors.hasErrors()) {
@@ -123,8 +125,10 @@ public class MediaController {
             return "redirect:/media";
         }
 
+        // get all unowned medias + the current setted one
         List<Media> medias = mediaService.readSortedAllUnowned(user.getId(), um != null ? Arrays.asList(um.getMedia()) : null);
 
+        // Set the view
         model.addAttribute("medias", medias);
         model.addAttribute("errors", model.asMap().get("errors"));
         return "media.edit";
@@ -136,6 +140,7 @@ public class MediaController {
 
         List<Media> medias = mediaService.readSortedAllUnowned(user.getId(), null);
 
+        // Retrieve the media
         if (!model.containsAttribute("myMedia")) { // If back due to validation error, keep previous
             model.addAttribute("myMedia", new UserMedia());
         }
@@ -143,6 +148,7 @@ public class MediaController {
             model.addAttribute("selectedMedia", medias.size() > 0 ? medias.get(0) : null);
         }
 
+        // Set the view
         model.addAttribute("medias", medias);
         model.addAttribute("errors", model.asMap().get("errors"));
         return "media.edit";

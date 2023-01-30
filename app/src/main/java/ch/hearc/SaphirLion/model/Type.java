@@ -10,6 +10,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
+/**
+ * The type of a media, like "manga", "BD", "anime", ...
+ */
 @Entity
 public class Type {
     @Id

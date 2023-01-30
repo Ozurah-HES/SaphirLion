@@ -15,6 +15,11 @@ import ch.hearc.SaphirLion.repository.CategoryRepository;
 import ch.hearc.SaphirLion.repository.TypeRepository;
 import ch.hearc.SaphirLion.repository.UserRepository;
 
+/**
+ * <p>Seed data only if there is no data for specific table</p>
+ * <p>V1 : 2 user, 1 type, 1 category</p>
+ * <p>Available users : "User 1", "User 2" ; with password "password"</p>
+ */
 @Order(2)
 @Profile("seed-prod")
 @Component
@@ -29,9 +34,6 @@ public class DataSeederProd implements CommandLineRunner {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    // Seed data only if there is no data for specific table
-    // V1 : 2 user, 1 type, 1 category
-    // 2 user ("User 1", "User 2" ; with password "password")
     @Override
     public void run(String... args) throws Exception {
         if (typeRepository.count() == 0) {

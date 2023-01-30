@@ -17,6 +17,7 @@ import ch.hearc.SaphirLion.service.AuthService_I;
 import jakarta.servlet.http.HttpSession;
 
 /**
+ * Service for authentication of a user on the website
  * @deprecated Remplaced by Spring Security
  */
 @Deprecated

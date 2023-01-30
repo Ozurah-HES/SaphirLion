@@ -52,15 +52,6 @@ public class MediaService implements MediaService_I {
     public List<Media> readAllOfUser(Long userId) {
 
         return mediaRepository.findAllOfUser(userId);
-
-        // === OLD TEST CODE (Should be tested when we have seen the correct way to do
-        // tests) ===
-
-        // var medias = mediaRepository.findAllWithUserMedias();
-        // return medias.stream().filter(
-        // media -> media.getUserMedias().stream().anyMatch(
-        // userMedia -> userMedia.getUser().getId() == userId
-        // )).toList();
     }
 
     @Override

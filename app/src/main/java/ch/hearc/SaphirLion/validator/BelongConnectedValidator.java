@@ -11,7 +11,11 @@ import ch.hearc.SaphirLion.model.User;
 import ch.hearc.SaphirLion.model.UserMedia;
 import ch.hearc.SaphirLion.repository.UserMediaRepository;
 
-// https://www.baeldung.com/spring-mvc-custom-validator
+/**
+ * Validate that the userMedia belongs to the connected user
+ * 
+ * @see also source : {@link}  https://www.baeldung.com/spring-mvc-custom-validator
+ */
 public class BelongConnectedValidator implements Validator {
 
     @Autowired
@@ -39,8 +43,10 @@ public class BelongConnectedValidator implements Validator {
 
         boolean result = userMediaRepository.belongsToUser(user.getId(), userMedia.getId());
         if (!result) {
+            /* Way 1 : add an error that can be displayed in the "error popup" of the page */
             //errors.rejectValue("user", "userMedia.user.notBelong", "Ce média ne vous appartient pas");
 
+            /* Way 2 : throw an exception to show an 403 error */
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }

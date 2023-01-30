@@ -7,6 +7,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ch.hearc.SaphirLion.model.User;
 import ch.hearc.SaphirLion.repository.UserRepository;
 
+/**
+ * Service to load a user from the database, used by Spring Security
+ */
 public class UserDetailService implements UserDetailsService {
 
 	@Autowired

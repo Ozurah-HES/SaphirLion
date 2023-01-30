@@ -4,6 +4,7 @@ import ch.hearc.SaphirLion.model.User;
 import jakarta.servlet.http.HttpSession;
 
 /**
+ * Service interface for authentication of a user on the website
  * @deprecated Remplaced by Spring Security
  */
 @Deprecated

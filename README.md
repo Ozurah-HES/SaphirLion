@@ -1,6 +1,6 @@
 ![Logo du projet](/doc/Logo.png?raw=true)
 
-# SaphirLion
+# Saphir Lion
 Avec **Saphir Lion** ne soyez plus perdu dans les séries que vous avez, retrouvez rapidement votre avancé !
 
 Saphir Lion est une application web avec le framework Spring (Java) permettant de gérer sa bibliothèque de mangas (ou autres livres).

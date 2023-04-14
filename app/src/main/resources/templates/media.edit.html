@@ -28,11 +28,7 @@
         <label for="nbOwned" class="form-label">En ma possession</label>
         <input id="nbOwned" name="nbOwned" class="form-control" type="number" min="0" th:value="${myMedia.nbOwned}" required/>
     </div>
-    <div class="mb-3">
-        <label for="nbPublished" class="form-label">Déjà paru</label>
-        <input id="nbPublished" name="nbPublished" class="form-control" type="number" min="0"
-            th:value="${myMedia.nbPublished}" required/>
-    </div>
+
     <div class="mb-3">
         <label for="remark" class="form-label">Remarque</label>
         <input id="remark" name="remark" class="form-control" type="text" th:value="${myMedia.remark}"

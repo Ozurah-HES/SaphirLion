@@ -46,12 +46,24 @@ public class UserMedia {
     @Size(max = 255, message = "La remarque ne doit pas dépasser 255 caractères")
     private String remark;
 
-    @AssertTrue(message = "Le nombre de parution doit être supérieur au nombre de possession")
+    /**
+     * Is the number of published is greater than the number of owned.
+     * Note this field is no longer required because the nb published is managed by an admin.
+     *    So, if admin forgot to update the nb published, the user can always update his nb owned.
+     * @return
+     */
+    // @AssertTrue(message = "Le nombre de parution doit être supérieur au nombre de possession")
     public boolean isNbPublishedGreaterThanNbOwned() {
         return media.getNbPublished() >= nbOwned;
     }
 
-    @AssertTrue(message = "Le nombre de parution doit être supérieur au nombre de vu")
+    /**
+     * Is the number of published is greater than the number of last seen.
+     * Note this field is no longer required because the nb published is managed by an admin.
+     *   So, if admin forgot to update the nb published, the user can always update his nb owned.
+     * @return
+     */
+    // @AssertTrue(message = "Le nombre de parution doit être supérieur au nombre de vu")
     public boolean isNbPublishedGreaterThanLastSeen() {
         return media.getNbPublished() >= lastSeen;
     }

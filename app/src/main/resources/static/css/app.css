@@ -18,3 +18,8 @@
 .media-advence-color-ok {
   color: #0EE000;
 }
+
+.thumbnail-media-list {
+  max-height: 100px;
+  max-width: 100px;
+}

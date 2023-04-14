@@ -65,11 +65,11 @@ public class MediaController {
         // page set to null to retrieve all the user's medias
         List<UserMedia> umList = userMediaService.readAllOfUser(user.getId(), null).getContent();
 
-        Long finished = umList.stream().filter(um -> um.getLastSeen() == um.getNbPublished()).count();
+        Long finished = umList.stream().filter(um -> um.getLastSeen() == um.getMedia().getNbPublished()).count();
         Long viewed = umList.stream().mapToLong(um -> um.getLastSeen()).sum();
-        Long notViewed = umList.stream().mapToLong(um -> um.getNbPublished()).sum() - viewed;
+        Long notViewed = umList.stream().mapToLong(um -> um.getMedia().getNbPublished()).sum() - viewed;
         Long buyed = umList.stream().mapToLong(um -> um.getNbOwned()).sum();
-        Long notBuyed = umList.stream().mapToLong(um -> um.getNbPublished()).sum() - buyed;
+        Long notBuyed = umList.stream().mapToLong(um -> um.getMedia().getNbPublished()).sum() - buyed;
 
         model.addAttribute("nbMedia", umList.size());
         model.addAttribute("nbMediaFinished", finished);

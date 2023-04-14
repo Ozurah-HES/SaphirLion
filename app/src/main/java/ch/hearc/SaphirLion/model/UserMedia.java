@@ -34,11 +34,6 @@ public class UserMedia {
     @JoinColumn(name = "media_id", nullable = false)
     private Media media;
 
-    @PositiveOrZero(message = "Le nombre de parution doit être positif")
-    @NotNull(message = "Le dernier vu ne doit pas être vide")  
-    @NumberFormat(style= Style.NUMBER) 
-    private int nbPublished;
-
     @PositiveOrZero(message = "Le nombre de possession doit être positif")
     @NotNull(message = "Le dernier vu ne doit pas être vide")  
     @NumberFormat(style= Style.NUMBER) 
@@ -53,12 +48,12 @@ public class UserMedia {
 
     @AssertTrue(message = "Le nombre de parution doit être supérieur au nombre de possession")
     public boolean isNbPublishedGreaterThanNbOwned() {
-        return nbPublished >= nbOwned;
+        return media.getNbPublished() >= nbOwned;
     }
 
     @AssertTrue(message = "Le nombre de parution doit être supérieur au nombre de vu")
     public boolean isNbPublishedGreaterThanLastSeen() {
-        return nbPublished >= lastSeen;
+        return media.getNbPublished() >= lastSeen;
     }
 
     public Long getId() {
@@ -83,14 +78,6 @@ public class UserMedia {
 
     public void setMedia(Media media) {
         this.media = media;
-    }
-
-    public int getNbPublished() {
-        return nbPublished;
-    }
-
-    public void setNbPublished(int nbPublished) {
-        this.nbPublished = nbPublished;
     }
 
     public int getNbOwned() {

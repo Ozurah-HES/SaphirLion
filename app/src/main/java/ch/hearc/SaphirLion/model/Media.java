@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +16,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 /**
@@ -40,6 +45,13 @@ public class Media {
 
     @OneToMany(mappedBy = "media")
     private List<UserMedia> usermedias = new ArrayList<UserMedia>();
+
+    @PositiveOrZero(message = "Le nombre de parution doit être positif")
+    @NotNull(message = "Le dernier vu ne doit pas être vide")  
+    @NumberFormat(style= Style.NUMBER) 
+    private int nbPublished;
+
+    private String imgUrl;
 
     public Long getId() {
         return id;
@@ -71,6 +83,25 @@ public class Media {
 
     public List<UserMedia> getUserMedias() {
         return usermedias;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public String getImgUrl() {
+        if (imgUrl == null || imgUrl.isBlank()) {
+            return "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
+        }
+        return imgUrl;
+    }
+
+    public int getNbPublished() {
+        return nbPublished;
+    }
+
+    public void setNbPublished(int nbPublished) {
+        this.nbPublished = nbPublished;
     }
 
     @Override

@@ -46,7 +46,6 @@ public class UserMediaServiceTest {
         newUserMedia.setMedia(medias.get(0));
         newUserMedia.setLastSeen(0);
         newUserMedia.setNbOwned(1);
-        newUserMedia.setNbPublished(2);
         newUserMedia.setRemark("Test remark");
 
         var um = userMediaService.save(newUserMedia);
@@ -62,14 +61,12 @@ public class UserMediaServiceTest {
         // Update
         newUserMedia.setLastSeen(1);
         newUserMedia.setNbOwned(2);
-        newUserMedia.setNbPublished(3);
         newUserMedia.setRemark("Updated remark");
 
         um = userMediaService.save(newUserMedia);
 
         assertTrue(um.getLastSeen() == 1);
         assertTrue(um.getNbOwned() == 2);
-        assertTrue(um.getNbPublished() == 3);
         assertEquals(um.getRemark(), "Updated remark");
 
         // Delete

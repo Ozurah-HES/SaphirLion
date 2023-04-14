@@ -64,10 +64,13 @@ public class DataSeederTest implements CommandLineRunner {
         media1.setName("Media Test 1");
         media1.setType(type1);
         media1.setCategory(category1);
+        media1.setNbPublished(3);
+        media1.setImgUrl("https://raw.githubusercontent.com/Ozurah-HES/SaphirLion/main/doc/Logo.png");
         Media media2 = new Media();
         media2.setName("Media Test 2");
         media2.setType(type2);
         media2.setCategory(category2);
+        media2.setNbPublished(2);
         // Test change order to see if it works when testing
         mediaRepository.saveAll(Arrays.asList(media2, media1));
 
@@ -85,14 +88,12 @@ public class DataSeederTest implements CommandLineRunner {
         userMedia1.setUser(user1);
         userMedia1.setMedia(media1);
         userMedia1.setNbOwned(2);
-        userMedia1.setNbPublished(3);
         userMedia1.setLastSeen(1);
         userMedia1.setRemark("Remark 1");
         UserMedia userMedia2 = new UserMedia();
         userMedia2.setUser(user2);
         userMedia2.setMedia(media2);
         userMedia2.setNbOwned(1);
-        userMedia2.setNbPublished(2);
         userMedia2.setLastSeen(0);
         userMedia2.setRemark("Remark 2");
         userMediaRepository.saveAll(Arrays.asList(userMedia1, userMedia2));
@@ -103,13 +104,13 @@ public class DataSeederTest implements CommandLineRunner {
             media.setName("TheSerie Arc " + i);
             media.setType(type1);
             media.setCategory(category1);
+            media.setNbPublished(200 + i);
             mediaRepository.save(media);
 
             UserMedia userMedia = new UserMedia();
             userMedia.setUser(user1);
             userMedia.setMedia(media);
             userMedia.setNbOwned(100 + i);
-            userMedia.setNbPublished(200 + i);
             userMedia.setLastSeen(i);
             userMedia.setRemark("Big collection " + i);
             userMediaRepository.save(userMedia);

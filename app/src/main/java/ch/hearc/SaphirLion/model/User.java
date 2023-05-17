@@ -76,6 +76,11 @@ public class User implements UserDetails {
         return usermedias;
     }
 
+    // Getter to have the id of the media when Json serializing
+    public List<Long> getUserMediasIds() {
+        return usermedias.stream().map(UserMedia::getId).toList();
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id);

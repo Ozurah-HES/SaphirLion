@@ -7,6 +7,8 @@ import java.util.Objects;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.format.annotation.NumberFormat.Style;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -81,6 +83,7 @@ public class Media {
         this.category = category;
     }
 
+    @JsonIgnore
     public List<UserMedia> getUserMedias() {
         return usermedias;
     }

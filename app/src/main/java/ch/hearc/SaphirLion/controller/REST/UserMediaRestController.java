@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,7 +48,6 @@ public class UserMediaRestController {
 
     @Autowired
     private BelongUserValidator belongValidator;
-
     /*
      * @GetMapping({ "/media" })
      * public String index(Model model, @AuthenticationPrincipal User user,

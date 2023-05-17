@@ -9,6 +9,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,10 +22,13 @@ import jakarta.persistence.Table;
 
 /**
  * The user of the application
- * @note The table name is "UserAccount" because "User" is a reserved word in H2 DB
+ * 
+ * @note The table name is "UserAccount" because "User" is a reserved word in H2
+ *       DB
  */
 @Entity
 @Table(name = "UserAccount")
+@JsonIgnoreProperties(value = {"accountNonExpired", "accountNonLocked", "credentialsNonExpired", "enabled", "authorities"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +45,7 @@ public class User implements UserDetails {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -53,6 +59,10 @@ public class User implements UserDetails {
         this.username = username;
     }
 
+    // TODO (just a note, not for this version) : if we want to be able to read the
+    // password from an admin for exemple, replace @JsonIgnore by @JsonView(...)
+    // https://www.baeldung.com/jackson-json-view-annotation
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -61,6 +71,7 @@ public class User implements UserDetails {
         this.password = new BCryptPasswordEncoder().encode(password);
     }
 
+    @JsonIgnore
     public List<UserMedia> getUserMedias() {
         return usermedias;
     }

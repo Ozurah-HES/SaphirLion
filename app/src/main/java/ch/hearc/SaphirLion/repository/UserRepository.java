@@ -16,4 +16,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
     List<UserMedia> findAllUserMedia(Long userId);
 
     User findByUsername(String username);
+
+    List<User> findAll();
 }

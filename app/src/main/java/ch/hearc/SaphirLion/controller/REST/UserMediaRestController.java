@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -48,101 +49,24 @@ public class UserMediaRestController {
 
     @Autowired
     private BelongUserValidator belongValidator;
+
+    @GetMapping(value = "/user/medias", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> index(@RequestBody User user) {
+        Page<UserMedia> usermedias = userMediaService.readAllOfUser(user.getId(), null);
+
+        String jsonResponse = null;
+        try {
+            jsonResponse = new ObjectMapper().writeValueAsString(usermedias.getContent());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON)
+                    .body("[\"Error while serializing data to json\"]");
+        }
+
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(jsonResponse);
+    }
+
     /*
-     * @GetMapping({ "/media" })
-     * public String index(Model model, @AuthenticationPrincipal User user,
-     * 
-     * @RequestParam("page") Optional<Integer> page) {
-     * 
-     * int currentPage = page.orElse(1);
-     * int pageSize = 10;
-     * 
-     * if (currentPage < 1) {
-     * currentPage = 1;
-     * }
-     * 
-     * ControllerUtils.modelCommonAttribute(model, user, "media",
-     * "Ma bibliothèque");
-     * 
-     * // === User medias stats ===
-     * 
-     * // page set to null to retrieve all the user's medias
-     * List<UserMedia> umList = userMediaService.readAllOfUser(user.getId(),
-     * null).getContent();
-     * 
-     * Long finished = umList.stream().filter(um -> um.getLastSeen() ==
-     * um.getNbPublished()).count();
-     * Long viewed = umList.stream().mapToLong(um -> um.getLastSeen()).sum();
-     * Long notViewed = umList.stream().mapToLong(um -> um.getNbPublished()).sum() -
-     * viewed;
-     * Long buyed = umList.stream().mapToLong(um -> um.getNbOwned()).sum();
-     * Long notBuyed = umList.stream().mapToLong(um -> um.getNbPublished()).sum() -
-     * buyed;
-     * 
-     * model.addAttribute("nbMedia", umList.size());
-     * model.addAttribute("nbMediaFinished", finished);
-     * model.addAttribute("nbMediaViewed", viewed);
-     * model.addAttribute("nbMediaNotViewed", notViewed);
-     * model.addAttribute("nbMediaBuyed", buyed);
-     * model.addAttribute("nbMediaNotBuyed", notBuyed);
-     * 
-     * // === Pagination for the view ===
-     * Page<UserMedia> umPage = userMediaService.readAllOfUser(
-     * user.getId(),
-     * PageRequest.of(currentPage - 1, pageSize));
-     * 
-     * model.addAttribute("myMedias", umPage.getContent());
-     * model.addAttribute("pages", umPage);
-     * 
-     * int totalPages = umPage.getTotalPages();
-     * if (totalPages > 0) {
-     * List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-     * .boxed()
-     * .collect(Collectors.toList());
-     * model.addAttribute("pageNumbers", pageNumbers);
-     * }
-     * 
-     * return "media";
-     * }
-     * 
-     * @GetMapping({ "/media/edit/{id}" })
-     * public String edit(
-     * RedirectAttributes redirectAttrs, Model model, @AuthenticationPrincipal User
-     * user,
-     * 
-     * @PathVariable(required = true) Integer id) {
-     * ControllerUtils.modelCommonAttribute(model, user, "media edit",
-     * "Modification d'un média");
-     * 
-     * UserMedia um;
-     * if (model.containsAttribute("myMedia")) { // If back due to validation error,
-     * keep previous state
-     * um = (UserMedia) model.getAttribute("myMedia");
-     * } else {
-     * um = userMediaService.read(id.longValue());
-     * model.addAttribute("myMedia", um);
-     * }
-     * 
-     * if (!model.containsAttribute("selectedMedia")) {
-     * model.addAttribute("selectedMedia", um.getMedia());
-     * }
-     * 
-     * BindingResult belongErrors = new BeanPropertyBindingResult(um, "UserMedia");
-     * belongValidator.validate(um, belongErrors);
-     * if (belongErrors.hasErrors()) {
-     * redirectAttrs.addFlashAttribute("errors", belongErrors.getAllErrors());
-     * 
-     * return "redirect:/media";
-     * }
-     * 
-     * List<Media> medias = mediaService.readSortedAllUnowned(user.getId(),
-     * Arrays.asList(um.getMedia()));
-     * 
-     * model.addAttribute("medias", medias);
-     * model.addAttribute("errors", model.asMap().get("errors"));
-     * return "media.edit";
-     * }
-     * 
      * @GetMapping({ "/media/add" })
      * public String add(Model model, @AuthenticationPrincipal User user) {
      * ControllerUtils.modelCommonAttribute(model, user, "media add",
@@ -220,38 +144,13 @@ public class UserMediaRestController {
      * }
      */
 
-    /*
-     * @DeleteMapping("/media/delete/", consumes = "application/json", produces =
-     * "application/json")
-     * public String delete(@ModelAttribute UserMedia userMedia, BindingResult
-     * errors,
-     * RedirectAttributes redirectAttrs, @AuthenticationPrincipal User user,
-     * ) {
-     * userMedia.setId(id.longValue());
-     * userMedia.setUser(user);
-     * 
-     * belongValidator.validate(userMedia, errors);
-     * if (errors.hasErrors()) {
-     * // TODO : For now, we assume the only possible error here is that the
-     * userMedia
-     * // does not belong to the user
-     * redirectAttrs.addFlashAttribute("errors", errors.getAllErrors());
-     * 
-     * return "redirect:/media";
-     * }
-     * 
-     * userMediaService.delete(userMedia.getId());
-     * return "redirect:/media";
-     * }
-     */
-
     @DeleteMapping(value = "/user/media", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> delete(@RequestBody JsonNode requestBody, BindingResult errors) {
         ObjectMapper objectMapper = new ObjectMapper();
-        // Disable fail on unknown properties to be able to retrieve "non property" of UserMedia and Also be able to auto-serialize usermedia
+        // Disable fail on unknown properties to be able to retrieve "non property" of
+        // UserMedia and Also be able to auto-serialize usermedia
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        
         User u = new User();
         UserMedia userMedia = null;
 

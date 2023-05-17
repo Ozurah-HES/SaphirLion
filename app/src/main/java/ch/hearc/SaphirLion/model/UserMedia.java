@@ -5,6 +5,8 @@ import java.util.Objects;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.format.annotation.NumberFormat.Style;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -76,6 +78,7 @@ public class UserMedia {
         this.id = id;
     }
 
+    @JsonIgnore
     public User getUser() {
         return user;
     }
@@ -84,12 +87,23 @@ public class UserMedia {
         this.user = user;
     }
 
+    // Getter to have the id of the user when Json serializing
+    public Long getUserId() {
+        return user.getId();
+    }
+
+    @JsonIgnore
     public Media getMedia() {
         return media;
     }
 
     public void setMedia(Media media) {
         this.media = media;
+    }
+
+    // Getter to have the id of the media when Json serializing
+    public Long getMediaId() {
+        return media.getId();
     }
 
     public int getNbOwned() {

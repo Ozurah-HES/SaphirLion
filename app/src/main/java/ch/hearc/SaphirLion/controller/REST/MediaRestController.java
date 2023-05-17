@@ -1,12 +1,16 @@
 package ch.hearc.SaphirLion.controller.REST;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,9 +18,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.hearc.SaphirLion.model.Media;
-import ch.hearc.SaphirLion.model.User;
 import ch.hearc.SaphirLion.service.impl.MediaService;
-import ch.hearc.SaphirLion.service.impl.UserService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
@@ -38,5 +41,36 @@ public class MediaRestController {
         }
 
         return ResponseEntity.ok().body(jsonResponse);
+    }
+
+    @PutMapping(value = "/media", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> edit(@Valid @RequestBody Media media, BindingResult errors) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        if (errors.hasErrors()) {
+            List<String> errorsResponse = new ArrayList<>();
+            for (FieldError error : errors.getFieldErrors()) {
+                System.out.println(error.getDefaultMessage());
+                errorsResponse.add(error.getDefaultMessage());
+            }
+
+            String errorsJson = null;
+            try {
+                errorsJson = objectMapper.writeValueAsString(errorsResponse);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+            return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body(errorsJson);
+        }
+
+        // TODO (for next version) : add category and type choice possibility
+        media.setCategory(mediaService.readAllCategories().get(0));
+        media.setType(mediaService.readAllTypes().get(0));
+
+        Media mCreated = mediaService.save(media);
+
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
+                .body("[\"Edited item Id\" :" + mCreated.getId() + "]");
     }
 }

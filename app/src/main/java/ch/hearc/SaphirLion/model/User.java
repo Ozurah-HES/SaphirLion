@@ -36,6 +36,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<UserMedia> usermedias = new ArrayList<UserMedia>();
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public Long getId() {
         return id;
     }

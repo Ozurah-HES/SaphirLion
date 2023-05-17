@@ -41,6 +41,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/js/**", "/css/**", "/images/**").permitAll()
                 .requestMatchers("/error/**").permitAll()
                 .requestMatchers("/", "/home", "/index").permitAll()
+                .requestMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().permitAll();

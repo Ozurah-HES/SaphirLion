@@ -1,5 +1,3 @@
-/* TODO REPLACE TO BELONG USER VALIDATOR */
-
 package ch.hearc.SaphirLion.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +11,8 @@ import ch.hearc.SaphirLion.model.User;
 import ch.hearc.SaphirLion.model.UserMedia;
 import ch.hearc.SaphirLion.repository.UserMediaRepository;
 
-/**
- * Validate that the userMedia belongs to the connected user
- * 
- * @see also source : {@link}  https://www.baeldung.com/spring-mvc-custom-validator
- */
-public class BelongConnectedValidator implements Validator {
+// https://www.baeldung.com/spring-mvc-custom-validator
+public class BelongUserValidator implements Validator {
 
     @Autowired
     private UserMediaRepository userMediaRepository;
@@ -35,7 +29,7 @@ public class BelongConnectedValidator implements Validator {
             return;
         }
 
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userMedia.getUser();
 
         if (user == null) {
             errors.rejectValue("user", "userMedia.user.null",
@@ -43,13 +37,14 @@ public class BelongConnectedValidator implements Validator {
             return;
         }
 
+        // We could also add check if media exists, but :
+        // Instead of "check if media exists & belong, we prompt "media not belong" even
+        // if it doesn't exist, because we don't want to give information about the
+        // existence of a media
+
         boolean result = userMediaRepository.belongsToUser(user.getId(), userMedia.getId());
         if (!result) {
-            /* Way 1 : add an error that can be displayed in the "error popup" of the page */
-            //errors.rejectValue("user", "userMedia.user.notBelong", "Ce média ne vous appartient pas");
-
-            /* Way 2 : throw an exception to show an 403 error */
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            errors.rejectValue("user", "userMedia.user.notBelong", "Ce média ne vous appartient pas");
         }
     }
 }

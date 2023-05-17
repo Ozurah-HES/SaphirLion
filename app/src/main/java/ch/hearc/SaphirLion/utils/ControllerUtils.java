@@ -1,6 +1,15 @@
 package ch.hearc.SaphirLion.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.validation.FieldError;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.hearc.SaphirLion.model.User;
 
@@ -16,5 +25,29 @@ public class ControllerUtils {
         model.addAttribute("currentPageName", currentPageName);
         model.addAttribute("title", pageTitle);
         model.addAttribute("user", user);
+    }
+
+    
+    public static String OnValidationErrorToJson(List<FieldError> errors) {
+        if (errors == null || errors.isEmpty()) {
+            return null;
+        }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<String> errorsResponse = new ArrayList<>();
+
+        for (FieldError error : errors) {
+            System.out.println(error.getDefaultMessage());
+            errorsResponse.add(error.getDefaultMessage());
+        }
+
+        String errorsJson = null;
+        try {
+            errorsJson = objectMapper.writeValueAsString(errorsResponse);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return errorsJson;
     }
 }

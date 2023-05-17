@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.hearc.SaphirLion.model.Media;
 import ch.hearc.SaphirLion.service.impl.MediaService;
+import ch.hearc.SaphirLion.utils.ControllerUtils;
 import jakarta.validation.Valid;
 
 @RestController
@@ -45,23 +46,10 @@ public class MediaRestController {
 
     @PutMapping(value = "/media", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> edit(@Valid @RequestBody Media media, BindingResult errors) {
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        if (errors.hasErrors()) {
-            List<String> errorsResponse = new ArrayList<>();
-            for (FieldError error : errors.getFieldErrors()) {
-                System.out.println(error.getDefaultMessage());
-                errorsResponse.add(error.getDefaultMessage());
-            }
-
-            String errorsJson = null;
-            try {
-                errorsJson = objectMapper.writeValueAsString(errorsResponse);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-
-            return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body(errorsJson);
+        String errorsAsJson = ControllerUtils.OnValidationErrorToJson(errors.getFieldErrors());
+        if (errorsAsJson != null && !errorsAsJson.isEmpty()) {
+            return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON)
+                    .body(errorsAsJson);
         }
 
         // TODO (for next version) : add category and type choice possibility

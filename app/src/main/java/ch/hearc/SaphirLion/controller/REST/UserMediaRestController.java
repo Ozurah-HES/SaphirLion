@@ -34,6 +34,7 @@ import ch.hearc.SaphirLion.model.UserMedia;
 import ch.hearc.SaphirLion.service.impl.MediaService;
 import ch.hearc.SaphirLion.service.impl.UserMediaService;
 import ch.hearc.SaphirLion.validator.BelongUserValidator;
+import ch.hearc.SaphirLion.utils.ControllerUtils;
 import jakarta.validation.Valid;
 
 @RestController
@@ -69,7 +70,7 @@ public class UserMediaRestController {
     }
 
     @PutMapping(value = "/user/media", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<String> edit(@RequestBody JsonNode requestBody, BindingResult errors) {
+    public ResponseEntity<String> edit(@Valid @RequestBody JsonNode requestBody, BindingResult errors) {
         ObjectMapper objectMapper = new ObjectMapper();
         // Disable fail on unknown properties to be able to retrieve "non property" of
         // UserMedia and Also be able to auto-serialize usermedia
@@ -94,6 +95,21 @@ public class UserMediaRestController {
 
         userMedia.setUser(u);
         userMedia.setMedia(mediaService.read(mediaId));
+
+        BindingResult userMediaErrors = new BeanPropertyBindingResult(userMedia, "UserMedia");
+        validator.validate(userMedia, userMediaErrors);
+        belongValidator.validate(userMedia, userMediaErrors);
+        String errorsAsJson = ControllerUtils.OnValidationErrorToJson(new ArrayList<>() {
+            {
+                addAll(errors.getFieldErrors());
+                addAll(userMediaErrors.getFieldErrors());
+            }
+        });
+
+        if (errorsAsJson != null && !errorsAsJson.isEmpty()) {
+            return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON)
+                    .body(errorsAsJson);
+        }
 
         UserMedia umCreated = userMediaService.save(userMedia);
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
@@ -123,25 +139,16 @@ public class UserMediaRestController {
         BindingResult userMediaErrors = new BeanPropertyBindingResult(userMedia, "UserMedia");
 
         belongValidator.validate(userMedia, userMediaErrors);
-        if (errors.hasErrors() || userMediaErrors.hasErrors()) {
-            List<String> errorsResponse = new ArrayList<>();
-            for (FieldError error : errors.getFieldErrors()) {
-                System.out.println(error.getDefaultMessage());
-                errorsResponse.add(error.getDefaultMessage());
+        String errorsAsJson = ControllerUtils.OnValidationErrorToJson(new ArrayList<>() {
+            {
+                addAll(errors.getFieldErrors());
+                addAll(userMediaErrors.getFieldErrors());
             }
-            for (FieldError error : userMediaErrors.getFieldErrors()) {
-                System.out.println(error.getDefaultMessage());
-                errorsResponse.add(error.getDefaultMessage());
-            }
+        });
 
-            String errorsJson = null;
-            try {
-                errorsJson = objectMapper.writeValueAsString(errorsResponse);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-
-            return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body(errorsJson);
+        if (errorsAsJson != null && !errorsAsJson.isEmpty()) {
+            return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON)
+                    .body(errorsAsJson);
         }
 
         userMediaService.delete(userMedia.getId());

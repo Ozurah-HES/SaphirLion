@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,83 +68,37 @@ public class UserMediaRestController {
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(jsonResponse);
     }
 
-    /*
-     * @GetMapping({ "/media/add" })
-     * public String add(Model model, @AuthenticationPrincipal User user) {
-     * ControllerUtils.modelCommonAttribute(model, user, "media add",
-     * "Ajout d'un média");
-     * 
-     * List<Media> medias = mediaService.readSortedAllUnowned(user.getId(), null);
-     * 
-     * if (!model.containsAttribute("myMedia")) { // If back due to validation
-     * error, keep previous
-     * model.addAttribute("myMedia", new UserMedia());
-     * }
-     * if (!model.containsAttribute("selectedMedia")) {
-     * model.addAttribute("selectedMedia", medias.size() > 0 ? medias.get(0) :
-     * null);
-     * }
-     * 
-     * model.addAttribute("medias", medias);
-     * model.addAttribute("errors", model.asMap().get("errors"));
-     * return "media.edit";
-     * }
-     * 
-     * @PutMapping({ "/media/edit" })
-     * public String edit(@Valid @ModelAttribute UserMedia userMedia, BindingResult
-     * errors,
-     * RedirectAttributes redirectAttrs, Model model,
-     * 
-     * @AuthenticationPrincipal User user, @RequestParam String mediaName) {
-     * 
-     * String trimmedMediaName = mediaName.trim();
-     * 
-     * userMedia.setUser(user);
-     * 
-     * boolean isEdit = userMedia.getId() != null;
-     * Media m = mediaService.readAll().stream()
-     * .filter(media -> media.getName().equals(trimmedMediaName))
-     * .findFirst()
-     * .orElse(null);
-     * 
-     * boolean isNewMedia = m == null;
-     * 
-     * if (isNewMedia) {
-     * m = new Media();
-     * m.setName(trimmedMediaName);
-     * 
-     * // TODO (for next version) : add category and type choice possibility
-     * m.setCategory(mediaService.readAllCategories().get(0));
-     * m.setType(mediaService.readAllTypes().get(0));
-     * }
-     * 
-     * // Validation
-     * validator.validate(m, errors);
-     * belongValidator.validate(userMedia, errors);
-     * if (errors.hasErrors()) {
-     * // flash attributes transmit is attributes to the model after the redirect
-     * redirectAttrs.addFlashAttribute("errors", errors.getAllErrors());
-     * redirectAttrs.addFlashAttribute("myMedia", userMedia);
-     * redirectAttrs.addFlashAttribute("selectedMedia", m);
-     * 
-     * if (isEdit)
-     * return "redirect:/media/edit/" + userMedia.getId();
-     * else
-     * return "redirect:/media/add";
-     * }
-     * 
-     * if (isNewMedia) {
-     * mediaService.save(m);
-     * }
-     * 
-     * // Link objects to userMedia
-     * userMedia.setMedia(m);
-     * 
-     * userMediaService.save(userMedia);
-     * 
-     * return "redirect:/media";
-     * }
-     */
+    @PutMapping(value = "/user/media", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> edit(@RequestBody JsonNode requestBody, BindingResult errors) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        // Disable fail on unknown properties to be able to retrieve "non property" of
+        // UserMedia and Also be able to auto-serialize usermedia
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        User u = new User();
+        UserMedia userMedia = null;
+
+        try {
+            u.setId(requestBody.get("userId").asLong());
+            userMedia = objectMapper.treeToValue(requestBody, UserMedia.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body("[\"json parse failed\"]");
+        }
+
+        Long mediaId = requestBody.get("mediaId").asLong();
+        if (!mediaService.idExists(mediaId)) {
+            return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON)
+                    .body("[\"media id does not exist\"]");
+        }
+
+        userMedia.setUser(u);
+        userMedia.setMedia(mediaService.read(mediaId));
+
+        UserMedia umCreated = userMediaService.save(userMedia);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
+                .body("[\"Edited item Id\" :" + umCreated.getId() + "]");
+    }
 
     @DeleteMapping(value = "/user/media", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> delete(@RequestBody JsonNode requestBody, BindingResult errors) {
@@ -155,7 +111,7 @@ public class UserMediaRestController {
         UserMedia userMedia = null;
 
         try {
-            u.setId(requestBody.get("user-id").asLong());
+            u.setId(requestBody.get("userId").asLong());
             userMedia = objectMapper.treeToValue(requestBody, UserMedia.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -189,6 +145,7 @@ public class UserMediaRestController {
         }
 
         userMediaService.delete(userMedia.getId());
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body("[\"deletion done\"]");
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
+                .body("[\"Deleted item ID\" : " + userMedia.getId() + "]");
     }
 }

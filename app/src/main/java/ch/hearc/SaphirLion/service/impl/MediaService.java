@@ -60,6 +60,11 @@ public class MediaService implements MediaService_I {
     }
 
     @Override
+    public boolean idExists(Long id) {
+        return mediaRepository.existsById(id);
+    }
+
+    @Override
     public List<Category> readAllCategories() {
         return (List<Category>) categoryRepository.findAll();
     }

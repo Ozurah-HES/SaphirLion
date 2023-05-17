@@ -22,6 +22,8 @@ public interface MediaService_I {
 
     public List<Media> readSortedAllUnowned(Long userId, Collection<Media> except);
 
+    public boolean idExists(Long id);
+
     // Linked data
     public List<Type> readAllTypes();
 

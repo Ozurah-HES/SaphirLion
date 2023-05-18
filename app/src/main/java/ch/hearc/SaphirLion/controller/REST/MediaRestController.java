@@ -44,6 +44,10 @@ public class MediaRestController {
 
     @PutMapping(value = "/media", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> edit(@Valid @RequestBody Media media, BindingResult errors) {
+        if (mediaService.nameExistsInOther(media.getId(), media.getName())) {
+            errors.rejectValue("name", "name.exists", "Name already exists");
+        }
+
         String errorsAsJson = ControllerUtils.OnValidationErrorToJson(errors.getFieldErrors());
         if (errorsAsJson != null && !errorsAsJson.isEmpty()) {
             return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON)

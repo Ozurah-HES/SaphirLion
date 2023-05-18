@@ -65,6 +65,12 @@ public class MediaService implements MediaService_I {
     }
 
     @Override
+    public boolean nameExistsInOther(Long id, String name) {
+        Media m = mediaRepository.findByName(name);
+        return m != null && m.getId() != id;
+    }
+
+    @Override
     public List<Category> readAllCategories() {
         return (List<Category>) categoryRepository.findAll();
     }

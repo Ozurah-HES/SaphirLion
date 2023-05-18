@@ -24,6 +24,8 @@ public interface MediaService_I {
 
     public boolean idExists(Long id);
 
+    public boolean nameExistsInOther(Long id, String name);
+
     // Linked data
     public List<Type> readAllTypes();
 

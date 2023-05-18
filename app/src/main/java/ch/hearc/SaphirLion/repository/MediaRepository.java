@@ -17,4 +17,6 @@ public interface MediaRepository extends CrudRepository<Media, Long> {
 
     @Query("SELECT m FROM Media m JOIN FETCH m.usermedias um WHERE um.user.id = ?1")
     List<Media> findAllOfUser(Long userId);
+
+    Media findByName(String name);
 }

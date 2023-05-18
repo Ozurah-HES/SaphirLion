@@ -1,5 +1,3 @@
-/* TODO REPLACE TO BELONG USER VALIDATOR */
-
 package ch.hearc.SaphirLion.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;

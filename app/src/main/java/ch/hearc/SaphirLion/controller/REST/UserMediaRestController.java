@@ -144,6 +144,6 @@ public class UserMediaRestController {
 
         userMediaService.delete(userMedia.getId());
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body("[\"Deleted item ID\" : " + userMedia.getId() + "]");
+                .body("[\"Deleted item ID : " + userMedia.getId() + "\"]");
     }
 }

@@ -1,4 +1,4 @@
-package ch.hearc.SaphirLion;
+package ch.hearc.SaphirLion.jms;
 
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Destination;

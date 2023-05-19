@@ -104,7 +104,7 @@ public class UserMediaRestController {
 
         UserMedia umCreated = userMediaService.save(userMedia);
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body("[\"Edited item Id\" :" + umCreated.getId() + "]");
+                .body("[\"Edited item Id: " + umCreated.getId() + "\"]");
     }
 
     @DeleteMapping(value = "/user/media", consumes = "application/json", produces = "application/json")

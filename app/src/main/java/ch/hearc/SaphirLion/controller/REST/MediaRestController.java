@@ -61,6 +61,6 @@ public class MediaRestController {
         Media mCreated = mediaService.save(media);
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body("[\"Edited item Id\" :" + mCreated.getId() + "]");
+                .body("[\"Edited item Id: " + mCreated.getId() + "\"]");
     }
 }
